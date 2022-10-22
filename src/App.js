@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useState} from 'react'
+import './styles/reset.css'
+import TodoGroup from "./.components/todoGroup";
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+    const [todosData, dataHandler] = useState([
+                {
+                    id: 1,
+                    title: "Card.Header",
+                    text: "make different state of task",
+                    startDate: "2022-10-22",
+                    endDate: "2022-11-16",
+                    // state: 'passive', 'in progress', 'done', 'deadlines close', 'too late'
+                },
+            ] )
+
+    const addTodo = (newTodo) => {
+        dataHandler([...todosData, newTodo])
+    }
+    const deleteItem = (deleteItemId) => {
+        dataHandler(todosData.filter( el => el.id !== deleteItemId))
+    }
+
+    return (
+        <div className="App">
+            <TodoGroup data={todosData} addTodo={addTodo} deleteItem={deleteItem}/>
+        </div>
+    )
 }
 
-export default App;
+export default App
