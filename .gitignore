@@ -23,5 +23,5 @@ yarn-debug.log*
 yarn-error.log*
 
 .idea
-./node_modules/.cache
-./node_modules/.bin
+node_modules/.cache
+node_modules/.bin
