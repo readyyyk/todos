@@ -1,3 +1,9 @@
-
+.dropDownEl > button {
+  display: flex;
+  align-items: center;
+  height: 1.4em;
+  width: fit-content;
+  padding: 0.4em;
+}
 
 /*# sourceMappingURL=style.css.map */

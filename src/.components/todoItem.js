@@ -30,7 +30,7 @@ const TodoItem = ({data, cnt, deleteItem, setStatus}) => {
 			<Card.Header className="pe-2 d-flex justify-content-between align-items-center">
 				<div className={'text-'+variantsData[data.status]+" d-flex align-items-center"}>
 					<span className="me-2"> {data.status} </span>
-					<DropdownButton autoClose={true} title="" variant='secondary'>
+					<DropdownButton autoClose={true} title="" variant='secondary' className="dropDownEl">
 						{dropDownData}
 					</DropdownButton>
 				</div>
