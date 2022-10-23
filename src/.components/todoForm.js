@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form'
 import InputGroup from 'react-bootstrap/InputGroup'
 import Moment from 'moment'
 
-const TodoForm = ({addTodo}) => {
+const TodoForm = ({addTodo, groupId}) => {
 	const title = useRef(),
 		text = useRef(),
 		endDate = useRef()
@@ -13,9 +13,10 @@ const TodoForm = ({addTodo}) => {
 		e.preventDefault()
 		if(!title.current.value || !text.current.value || !endDate.current.value)
 			return
-		const currentDate = Moment().format('YYYY-MM-DD'),
-			newTask = {
+		const currentDate = Moment().format('YYYY-MM-DD')
+		const newTask = {
 			id: Date.now(),
+			groupId: groupId,
 			title: title.current.value,
 			text: text.current.value,
 			startDate: `${currentDate}`,
