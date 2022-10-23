@@ -9,7 +9,7 @@ const NewGroupForm = ({newGroup}) => {
 
 	const setNewGroupData = (e) => {
 		e.preventDefault()
-		if(!title)
+		if(!title.current.value)
 			return
 		const newGroupData = {
 			id: Date.now(),
@@ -22,7 +22,7 @@ const NewGroupForm = ({newGroup}) => {
 	return (
 		<div>
 			<InputGroup className="p-3 pb-1">
-				<Form.Control placeholder='New group title' ref={title}/>
+				<Form.Control placeholder='New group title' ref={title} aria-required={true}/>
 				<Button
 					variant="outline-success"
 					onClick={e=>setNewGroupData(e)}

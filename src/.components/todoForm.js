@@ -20,7 +20,8 @@ const TodoForm = ({addTodo, groupId}) => {
 			title: title.current.value,
 			text: text.current.value,
 			startDate: `${currentDate}`,
-			endDate: endDate.current.value
+			endDate: endDate.current.value,
+			status: "passive"
 		}
 		addTodo(newTask)
 
@@ -31,7 +32,7 @@ const TodoForm = ({addTodo, groupId}) => {
 
 	return (
 		<div>
-			<InputGroup className="p-3 pb-1">
+			<InputGroup className="p-3 pb-1" border="secondary">
 				<Form.Control placeholder='title' ref={title}/>
 				<Form.Control placeholder='text' ref={text}/>
 				<Form.Control placeholder='deadline' type='date' min={Moment().format('YYYY-MM-DD')} ref={endDate}/>
