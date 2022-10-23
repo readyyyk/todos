@@ -9,7 +9,7 @@ const TodoItem = ({data, cnt, deleteItem, setStatus}) => {
 
 	const variantsData = {
 		'passive': "secondary",
-		'important': "warning",
+		'IMPORTANT': "warning",
 		'in progress': "primary",
 		'done': "success",
 		'deadlines close': "warning",
@@ -41,7 +41,7 @@ const TodoItem = ({data, cnt, deleteItem, setStatus}) => {
 				</div>
 			</Card.Header>
 			<Card.Body>
-				<Card.Title className="fs-4 text-primary">
+				<Card.Title className={'fs-4 text-'+variantsData[data.status]}>
 					<span> {cnt} </span>{/**/}
 					<span> {data.title} </span>
 				</Card.Title>

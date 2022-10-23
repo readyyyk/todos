@@ -6,13 +6,13 @@ import NewGroupForm from "./.components/newGroupForm";
 
 
 function App() {
-    const [groupsData, groupsDataHandler] = useState( [{id:0, title:"first group"}] )
+    const [groupsData, groupsDataHandler] = useState( [{id:0, title:"first group", bgColor:"#BFBFBF", textColor:"#0D6EFD"}] )
     const [groupsInnerData, groupsInnerDataHandler] = useState( [
         {
-            id: 0,
+            id: 1,
             groupId: 0,
-            title: "first todo",
-            text: "first todo text",
+            title: "First todo",
+            text: "First todo text",
             startDate: "2022-10-22",
             endDate: "2022-11-16",
             status: "in progress"
