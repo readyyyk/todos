@@ -21,7 +21,6 @@ exp.get('/api', (req, res) => {
 	connection.query(query, [id], (err, sqlRres)=>{
 		if(err) throw err
 		res.json(sqlRres[0].data)
-
 		connection.end()
 	})
 })
@@ -30,10 +29,8 @@ exp.post('/upd', (req, res) => {
 	const connection = mysql.createConnection( connectionCfg ),
 		query = 'UPDATE data SET data=? WHERE id=?'
 
-	console.log(req)
-
 	const data = req.body.data,
-		id = req.data.loggedId
+		id = req.body.loggedId
 
 	connection.query(query, [data, id], (err, sqlRres)=>{
 

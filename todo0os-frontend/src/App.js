@@ -8,9 +8,9 @@ import NavbarBs from './.components/NavbarBs'
 import ModalBs from "./.components/ModalBs";
 
 const tempId = 2
-//          updRequestCfg.body.loggedId = tempId
-//         updRequestCfg.body.data = (JSON.stringify([groupsData, groupsInnerData])).replace('\"', '"')
-//         fetch('/upd', updRequestCfg)
+        //  updRequestCfg.body.loggedId = tempId
+        // updRequestCfg.body.data = (JSON.stringify([groupsData, groupsInnerData])).replace('\"', '"')
+        // fetch('/upd', updRequestCfg)
 
 function App() {
     const updRequestCfg = {
@@ -39,6 +39,7 @@ function App() {
 
     useEffect( () => {
         if( dataJSON !== '' ){
+            console.log(dataJSON)
             const data = JSON.parse(dataJSON)
             groupsDataHandler([...data[0]])
             groupsInnerDataHandler([...data[1]])
@@ -51,6 +52,12 @@ function App() {
 
     const addTodo = (newTodo) => {
         groupsInnerDataHandler([...groupsInnerData, newTodo])
+        let temp = {
+            loggedId: tempId,
+            data: JSON.stringify([groupsData, groupsInnerData]).replace('\"','"'),
+        }
+        updRequestCfg.body = JSON.stringify(temp)
+        fetch('/upd', updRequestCfg)
     }
     const deleteItem = (deleteItemId) => {
         groupsInnerDataHandler(groupsInnerData.filter( el => el.id !== deleteItemId))
