@@ -17,11 +17,12 @@ const TodoItem = ({data, cnt, deleteItem, setStatus}) => {
 	}
 
 	let dropDownData = []
-    for(const status in variantsData)
+    for(const [status, i] in variantsData)
 		 dropDownData.push(
 			<Dropdown.Item
 				onClick={()=>setStatus(status, data.id)}
 				className={"text-"+variantsData[status]}
+				key={"status"+toString(i)+toString(data.id)}
 			> {status} </Dropdown.Item>
 		 )
 
