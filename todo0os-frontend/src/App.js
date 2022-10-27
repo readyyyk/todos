@@ -7,25 +7,13 @@ import NewGroupForm from "./.components/newGroupForm"
 import NavbarBs from './.components/NavbarBs'
 import ModalBs from "./.components/ModalBs";
 
-const tempId = 2
-        //  updRequestCfg.body.loggedId = tempId
-        // updRequestCfg.body.data = (JSON.stringify([groupsData, groupsInnerData])).replace('\"', '"')
-        // fetch('/upd', updRequestCfg)
+const tempId = 1
 
 function App() {
-    const updRequestCfg = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: {
-            loggedId: '',
-            data: ''
-        },
-    }
-
     const [dataJSON, setData] = useState('')
 
     useEffect(() => {
-        fetch("/api")
+        fetch(`/api/${tempId}`, { method:'GET' })
         .then(response => response.json() )
         .then(resData => {
             resData.replace('\"', `'`)
@@ -37,14 +25,32 @@ function App() {
     const [groupsInnerData, groupsInnerDataHandler] = useState( [] )
     const [modalShow, setModalShow] = React.useState(false)
 
+    const updRequestCfg = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: {
+            loggedId: '',
+            data: ''
+        },
+    }
     useEffect( () => {
         if( dataJSON !== '' ){
-            console.log(dataJSON)
             const data = JSON.parse(dataJSON)
             groupsDataHandler([...data[0]])
             groupsInnerDataHandler([...data[1]])
         }
     }, [dataJSON] )
+
+    useEffect( () => {
+        if( groupsData.length ){
+            let temp = {
+                loggedId: tempId,
+                data: JSON.stringify([groupsData, groupsInnerData]).replace('\"','"'),
+            }
+            updRequestCfg.body = JSON.stringify(temp)
+            fetch('/upd', updRequestCfg)
+        }
+    }, [groupsData, groupsInnerData] )
 
     const newGroup = (newGroupData) => {
         groupsDataHandler([...groupsData, newGroupData])
@@ -52,12 +58,6 @@ function App() {
 
     const addTodo = (newTodo) => {
         groupsInnerDataHandler([...groupsInnerData, newTodo])
-        let temp = {
-            loggedId: tempId,
-            data: JSON.stringify([groupsData, groupsInnerData]).replace('\"','"'),
-        }
-        updRequestCfg.body = JSON.stringify(temp)
-        fetch('/upd', updRequestCfg)
     }
     const deleteItem = (deleteItemId) => {
         groupsInnerDataHandler(groupsInnerData.filter( el => el.id !== deleteItemId))

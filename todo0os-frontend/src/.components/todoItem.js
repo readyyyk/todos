@@ -16,15 +16,18 @@ const TodoItem = ({data, cnt, deleteItem, setStatus}) => {
 		'too late': "danger"
 	}
 
-	let dropDownData = []
-    for(const [status, i] in variantsData)
+	let dropDownData = [],
+		dropDownCnt = 0
+    for(const status in variantsData){
+	    dropDownCnt++
 		 dropDownData.push(
 			<Dropdown.Item
 				onClick={()=>setStatus(status, data.id)}
 				className={"text-"+variantsData[status]}
-				key={"status"+toString(i)+toString(data.id)}
+				key={`status${data.id}${dropDownCnt}`}
 			> {status} </Dropdown.Item>
 		 )
+    }
 
 	return (
 		<Card className="m-2 shadow-sm" border="secondary" style={{width:"24rem"}}>

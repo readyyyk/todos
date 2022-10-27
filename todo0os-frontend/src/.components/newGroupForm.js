@@ -11,7 +11,6 @@ const NewGroupForm = ({newGroup}) => {
 
 	const setNewGroupData = (e) => {
 		let shadow = document.querySelector("#text-shadow-checkbox").checked
-		console.log(shadow)
 		e.preventDefault()
 		if(!title.current.value)
 			return

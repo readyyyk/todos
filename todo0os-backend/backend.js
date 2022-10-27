@@ -11,12 +11,12 @@ const connectionCfg = {
 	database: "todo0os-db"
 }
 
-exp.get('/api', (req, res) => {
+exp.get('/api/:loggedId', (req, res) => {
 	const connection = mysql.createConnection( connectionCfg ),
 		query = 'SELECT * FROM data WHERE id=?'
 
-	//temp id
-	const id = 2
+	const id = req.params.loggedId
+	console.log(id)
 
 	connection.query(query, [id], (err, sqlRres)=>{
 		if(err) throw err
@@ -31,6 +31,8 @@ exp.post('/upd', (req, res) => {
 
 	const data = req.body.data,
 		id = req.body.loggedId
+
+	console.log(data)
 
 	connection.query(query, [data, id], (err, sqlRres)=>{
 
