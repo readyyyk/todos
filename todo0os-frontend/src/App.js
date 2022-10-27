@@ -6,24 +6,39 @@ import TodoGroup from "./.components/todoGroup"
 import NewGroupForm from "./.components/newGroupForm"
 import NavbarBs from './.components/NavbarBs'
 import ModalBs from "./.components/ModalBs";
-
-const tempId = 1
+import ToastBs from "./.components/ToastBs";
 
 function App() {
     const [dataJSON, setData] = useState('')
+    const [logged, setLogged] = useState({id:0,login:''} )
+
+    useEffect( () => {
+        const c = document.cookie
+        if(c)
+            setLogged({
+                id: Number(c.split('; ').find((kv) => kv.startsWith('id='))?.split('=')[1]),
+                login: c.split('; ').find((kv) => kv.startsWith('login='))?.split('=')[1],
+            })
+    }, [] )
 
     useEffect(() => {
-        fetch(`/api/${tempId}`, { method:'GET' })
-        .then(response => response.json() )
-        .then(resData => {
-            resData.replace('\"', `'`)
-            setData(resData)
-        })
-    }, [])
+        if(logged.id)
+            fetch(`/api/${logged.id}`, { method:'GET' })
+            .then(response => response.json() )
+            .then(resData => {
+                resData.replace('\"', `'`)
+                setData(resData)
+            })
+        else{
+            groupsDataHandler([])
+            groupsInnerDataHandler([])
+        }
+    }, [logged])
 
     const [groupsData, groupsDataHandler] = useState( [] )
     const [groupsInnerData, groupsInnerDataHandler] = useState( [] )
     const [modalShow, setModalShow] = React.useState(false)
+    const [toastShow, setToastShow] = React.useState({show:false, success:false, action:''})
 
     const updRequestCfg = {
         method: 'POST',
@@ -44,7 +59,7 @@ function App() {
     useEffect( () => {
         if( groupsData.length ){
             let temp = {
-                loggedId: tempId,
+                loggedId: logged.id,
                 data: JSON.stringify([groupsData, groupsInnerData]).replace('\"','"'),
             }
             updRequestCfg.body = JSON.stringify(temp)
@@ -73,6 +88,11 @@ function App() {
         groupsInnerDataHandler([...currentData])
     }
 
+    const showToastHandler = (data) => {
+        setToastShow(data)
+        setModalShow(false)
+    }
+
     let groupsReact = []
     const loadGroups = () => {
         groupsReact = []
@@ -95,7 +115,12 @@ function App() {
     return (
         <div className="App">
 
-            <NavbarBs setModalShow={setModalShow}/>
+            <NavbarBs
+                setModalShow={setModalShow}
+                login={logged.login}
+                setLogged={setLogged}
+                setData={setData}
+            />
 
             {
                 ( dataJSON !== '' ) ?
@@ -105,7 +130,21 @@ function App() {
                     </div> )
             }
 
-            <ModalBs setModalShow={setModalShow} modalShow={modalShow}/>
+            {/*todo: todos list of tasks inside offcanvas*/}
+
+            <ToastBs
+                setToastShow={setToastShow}
+                toastData={toastShow}
+            />
+
+            <ModalBs
+                setModalShow={setModalShow}
+                modalShow={modalShow}
+                showToastHandler={showToastHandler}
+                setLoggedId={setLogged}
+            />
+
+
         </div>
     )
 }
