@@ -74,27 +74,24 @@ exp.post('/regAction/:login/:password',
 		const login = req.params.login,
 			password = req.params.password,
 			connection = mysql.createConnection( connectionCfg ),
-			query = `INSERT INTO data(login, password, data) VALUES (?,?,'[[{"id":1666953907709,"title":"example group","bgColor":"#bfbfbf","textColor":"#0d6efd","textShadow":false}],[]]')`
+			query = `INSERT INTO data(login, password, data) VALUES (?,?,'[[{"id":1666953907709,"title":"example group","bgColor":"#bfbfbf","textColor":"#0d6efd","textShadow":false}],[]]')`,
+			checkQuery = `SELECT id FROM data WHERE login=?`
 
-		// console.log(password)
-
-		connection.query(query, [login, password], (err, sqlRes)=>{
+		connection.query(checkQuery, [login], (err, checkData) => {
 			if(err) throw err
 
-			/*
-			if(sqlRes.length === 0)
-			 	res.json({loginNotFound:true, wrongPassword:false, loggedId:''} )
-			if(sqlRes[0].password !== password){
-		       res.json({loginNotFound:false, wrongPassword:true, loggedId:''} )
+			if(checkData.length){
+				res.json({success:false, error:'Account with this login already exists'})
+				connection.end()
+			} else {
+				connection.query(query, [login, password], (err, sqlRes)=> {
+					if (err) throw err
+					// console.log(sqlRes)
+					// res.json(sqlRes)
+					res.json({success:true, loggedId:sqlRes.insertId, loggedLogin: login} )
+					connection.end()
+				})
 			}
-			*/
-
-			// if(sqlRes.length === 0 || sqlRes[0].password !== password){
-			// 	res.json({success:false, loggedId:'', loggedLogin:''} )
-			// } else {
-			// 	res.json({success:true, loggedId:sqlRes[0].id, loggedLogin:sqlRes[0].login} )
-			// }
-			connection.end()
 		})
 	}
 )

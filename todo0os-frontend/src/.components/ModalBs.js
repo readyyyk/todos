@@ -52,11 +52,13 @@ const ModalBs = ({setModalShow, modalShow, setToastShow, setLoggedId, popoverSho
 					document.cookie = `id=${response.loggedId};`
 					document.cookie =  `login=${login.current.value};`
 					setLoggedId({id: response.loggedId, login: login.current.value})
+				} else {
+					temp.text = response.error
 				}
 
 				popoverShowSet(true)
 				setToastShow(temp)
-				setModalShow({show:temp.success, action:'login'})
+				setModalShow({show:!temp.success, action:'reg'})
 			})
 		} else {
 			popoverShowSet(true)
