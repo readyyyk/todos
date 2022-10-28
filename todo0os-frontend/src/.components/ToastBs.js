@@ -10,20 +10,14 @@ const ToastBs = ({setToastShow, toastData}) => {
             delay={3000}
 			autohide
 			bg={toastData.success?'success':'danger'}
-			style={{position:'fixed',top:'1em',right:'1em',zIndex:'2'}}
+			style={{position:'fixed',top:'1em',right:'1em',zIndex:'100'}}
 			className={'text-light'}
 		>
 			<Toast.Header className='text-dark'>
 				<ChecklistIcon size={24} className='rounded me-2'/>
 				<strong className="me-auto"> todo0os! </strong>
 			</Toast.Header>
-			{
-				(toastData.success) ?
-					(toastData.action==='login') ?
-						( <Toast.Body> Successfully logged </Toast.Body> ) :
-					( <Toast.Body> Successfully registered </Toast.Body> ) :
-				( <Toast.Body> Something went wrong... </Toast.Body> )
-			}
+			<Toast.Body> { toastData.text } </Toast.Body>
 		</Toast>
 	);
 };

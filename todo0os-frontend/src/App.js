@@ -37,8 +37,9 @@ function App() {
 
     const [groupsData, groupsDataHandler] = useState( [] )
     const [groupsInnerData, groupsInnerDataHandler] = useState( [] )
-    const [modalShow, setModalShow] = React.useState(false)
-    const [toastShow, setToastShow] = React.useState({show:false, success:false, action:''})
+    const [modalShow, setModalShow] = React.useState({show:false, action:'login'})
+    const [toastShow, setToastShow] = React.useState({show:false, success:false, action:'', text:''})
+    const [popoverShow, popoverShowSet] = useState( false )
 
     const updRequestCfg = {
         method: 'POST',
@@ -88,11 +89,6 @@ function App() {
         groupsInnerDataHandler([...currentData])
     }
 
-    const showToastHandler = (data) => {
-        setToastShow(data)
-        setModalShow(false)
-    }
-
     let groupsReact = []
     const loadGroups = () => {
         groupsReact = []
@@ -120,6 +116,8 @@ function App() {
                 login={logged.login}
                 setLogged={setLogged}
                 setData={setData}
+                popoverShow={popoverShow}
+                popoverShowSet={popoverShowSet}
             />
 
             {
@@ -132,18 +130,18 @@ function App() {
 
             {/*todo: todos list of tasks inside offcanvas*/}
 
+            <ModalBs
+                setModalShow={setModalShow}
+                modalShow={modalShow}
+                setToastShow={setToastShow}
+                setLoggedId={setLogged}
+                popoverShowSet={popoverShowSet}
+            />
+
             <ToastBs
                 setToastShow={setToastShow}
                 toastData={toastShow}
             />
-
-            <ModalBs
-                setModalShow={setModalShow}
-                modalShow={modalShow}
-                showToastHandler={showToastHandler}
-                setLoggedId={setLogged}
-            />
-
 
         </div>
     )

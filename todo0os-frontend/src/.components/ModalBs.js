@@ -1,10 +1,11 @@
 import React, {useRef} from 'react';
 import {Button, Form, Modal} from "react-bootstrap";
 
-const ModalBs = ({modalShow, setModalShow, showToastHandler, setLoggedId}) => {
+const ModalBs = ({setModalShow, modalShow, setToastShow, setLoggedId, popoverShowSet}) => {
 
 	const login = useRef(),
-		password = useRef()
+		password = useRef(),
+		passwordRep = useRef()
 
 	const loginAction = (e) => {
 		e.preventDefault()
@@ -14,37 +15,88 @@ const ModalBs = ({modalShow, setModalShow, showToastHandler, setLoggedId}) => {
 			const temp = {
 				show: true,
 				success: false,
-				action: 'login'
+				action: 'login',
+				text: 'You are not logged in'
 			}
 			if(response.success){
 				temp.success = true
+				temp.text = 'Successfully logged in'
+
 				document.cookie = `id=${response.loggedId};`
 				document.cookie =  `login=${response.loggedLogin};`
 				setLoggedId({id: response.loggedId, login: response.loggedLogin})
 			}
 
-			showToastHandler(temp)
+			popoverShowSet(true)
+			setToastShow(temp)
+			setModalShow({show:false, action:'login'})
 		})
 	}
 
+	const regAction = (e) => {
+		e.preventDefault()
+		if(password.current.value === passwordRep.current.value){
+			fetch(`/regAction/${login.current.value}/${password.current.value}`, { method:'POST' })
+			.then(response => response.json() )
+			.then(response => {
+				const temp = {
+					show: true,
+					success: false,
+					action: 'reg',
+					text: 'You are not registered'
+				}
+				if(response.success){
+					temp.success = true
+					temp.text = 'Successfully registered'
+
+					document.cookie = `id=${response.loggedId};`
+					document.cookie =  `login=${login.current.value};`
+					setLoggedId({id: response.loggedId, login: login.current.value})
+				}
+
+				popoverShowSet(true)
+				setToastShow(temp)
+				setModalShow({show:temp.success, action:'login'})
+			})
+		} else {
+			popoverShowSet(true)
+			setToastShow({show: true, success: false, action: 'login', text: 'Passwords are different'})
+			setModalShow({show: true, action:'reg'})
+		}
+	}
+
 	return (
-		<Modal size="lg" centered show={modalShow}>
+		<Modal size="lg" centered show={modalShow.show}>
 			<Modal.Header>
 				<Modal.Title>
-					Sign in / Sign up
+					{modalShow.action==='login'?'Log in':'Sign up'}
 				</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
 				<Form>
-					<Form.Group className="mb-3" controlId="formBasicEmail">
+					<Form.Group className="mb-3">
 						<Form.Control type="text" placeholder="Login" autoComplete='on' ref={login}/>
 					</Form.Group>
-					<Form.Group className="mb-3" controlId="formBasicPassword">
-						<Form.Control type="password" placeholder="Password" ref={password} autoComplete='on' omplete="on"/>
+					<Form.Group className="mb-3">
+						<Form.Control type="password" placeholder="Password" ref={password} autoComplete='on'/>
 					</Form.Group>
+					{
+						(modalShow.action==='login')?
+						(<></>):
+						(
+						<Form.Group className="mb-3">
+							<Form.Control type="password" placeholder="repeat your Password" ref={passwordRep} autoComplete='off'/>
+						</Form.Group>
+						)
+					}
 
-					<Button onClick={(e)=>loginAction(e)} variant="primary" type="submit" className='me-2'> Submit </Button>
-					<Button onClick={()=>setModalShow(false)} variant='secondary'> Cancel </Button>
+					{
+						(modalShow.action==='login')?
+						(<Button onClick={(e)=>loginAction(e)} variant="primary" type="submit" className='me-2'> Log in </Button>):
+						(<Button onClick={(e)=>regAction(e)} variant="success" type="submit" className='me-2'> Sign up </Button>)
+					}
+
+					<Button onClick={()=>{setModalShow(false);popoverShowSet(true)}} variant='secondary'> Cancel </Button>
 				</Form>
 			</Modal.Body>
 		</Modal>
