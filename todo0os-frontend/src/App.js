@@ -8,6 +8,12 @@ import NavbarBs from './.components/NavbarBs'
 import ModalBs from "./.components/ModalBs";
 import ToastBs from "./.components/ToastBs";
 
+// Моя женщина взяла мой огромный фалас себе в рот и начала его жестко сосать. Мой хуй начал синеть от его жёсткого засоса, я ели сдерживался чтобы не накончать ей прямо в глотку. Потом я попросил её снимать её грязные трусики, они были мокрые 
+
+const ip = '127.0.0.1',
+    port = '5000',
+    apiLink = `http://${ip}:${port}`
+
 function App() {
     const [dataJSON, setData] = useState('')
     const [logged, setLogged] = useState({id:0,login:''} )
@@ -23,13 +29,13 @@ function App() {
 
     useEffect(() => {
         if(logged.id)
-            fetch(`/api/${logged.id}`, { method:'GET' })
+            fetch(`${apiLink}/api/${logged.id}`, { method:'GET' })
             .then(response => response.json() )
             .then(resData => {
                 resData.replace('\"', `'`)
                 setData(resData)
             })
-        else{
+        else {
             groupsDataHandler([])
             groupsInnerDataHandler([])
         }
@@ -64,7 +70,7 @@ function App() {
                 data: JSON.stringify([groupsData, groupsInnerData]).replace('\"','"'),
             }
             updRequestCfg.body = JSON.stringify(temp)
-            fetch('/upd', updRequestCfg)
+            fetch(`${apiLink}/upd`, updRequestCfg)
         }
     }, [groupsData, groupsInnerData] )
 
@@ -136,6 +142,7 @@ function App() {
                 setToastShow={setToastShow}
                 setLoggedId={setLogged}
                 popoverShowSet={popoverShowSet}
+                apiLink={apiLink}
             />
 
             <ToastBs

@@ -1,7 +1,7 @@
 import React, {useRef} from 'react';
 import {Button, Form, Modal} from "react-bootstrap";
 
-const ModalBs = ({setModalShow, modalShow, setToastShow, setLoggedId, popoverShowSet}) => {
+const ModalBs = ({setModalShow, modalShow, setToastShow, setLoggedId, popoverShowSet, apiLink}) => {
 
 	const login = useRef(),
 		password = useRef(),
@@ -9,7 +9,7 @@ const ModalBs = ({setModalShow, modalShow, setToastShow, setLoggedId, popoverSho
 
 	const loginAction = (e) => {
 		e.preventDefault()
-		fetch(`/loginAction/${login.current.value}/${password.current.value}`, { method:'GET' })
+		fetch(`${apiLink}/loginAction/${login.current.value}/${password.current.value}`, { method:'GET' })
 		.then(response => response.json() )
 		.then(response => {
 			const temp = {
@@ -36,7 +36,7 @@ const ModalBs = ({setModalShow, modalShow, setToastShow, setLoggedId, popoverSho
 	const regAction = (e) => {
 		e.preventDefault()
 		if(password.current.value === passwordRep.current.value){
-			fetch(`/regAction/${login.current.value}/${password.current.value}`, { method:'POST' })
+			fetch(`${apiLink}/regAction/${login.current.value}/${password.current.value}`, { method:'POST' })
 			.then(response => response.json() )
 			.then(response => {
 				const temp = {

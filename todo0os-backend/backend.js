@@ -1,8 +1,10 @@
 const mysql = require('mysql')
 const express = require('express')
+const cors = require("cors")
 
 const exp = express()
 exp.use(express.json())
+exp.use(cors())
 
 const connectionCfg = {
 	host: "127.0.0.1",
@@ -98,3 +100,4 @@ exp.post('/regAction/:login/:password',
 
 
 exp.listen(5000, () => { console.log(`serv started`) })
+/**/
