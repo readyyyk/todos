@@ -8,7 +8,7 @@ import NavbarBs from './.components/NavbarBs'
 import ModalBs from "./.components/ModalBs";
 import ToastBs from "./.components/ToastBs";
 
-// Моя женщина взяла мой огромный фалас себе в рот и начала его жестко сосать. Мой хуй начал синеть от его жёсткого засоса, я ели сдерживался чтобы не накончать ей прямо в глотку. Потом я попросил её снимать её грязные трусики, они были мокрые 
+
 
 const ip = '127.0.0.1',
     port = '5000',

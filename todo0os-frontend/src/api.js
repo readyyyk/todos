@@ -72,19 +72,24 @@ class Api {
         this.headers = {}
     }
 
+    /*
+    // AUTH
     set_headers (headersData){
-        if( headersData.has('Authorization') ) {
-            this.headers = {
-               'accept': 'application/json',
-               'Content-Type': 'application/json'
-            }
-        }
         this.headers = {
             'accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': this.get_auth()
+            'Content-Type': 'application/json'
+        }
+        if( !headersData.has('Authorization') ) {
+            this.headers['Authorization'] = this.get_auth()
         }
     }
+    set_auth(access_token){
+        Headers.set('Authorization', 'Bearer '+access_token);
+    }
+    get_auth(){
+        return Headers.get('Authorization')
+    }
+    */
 
     make_request_object(body, method = 'POST'){
         return {
@@ -92,8 +97,8 @@ class Api {
             headers: this.headers,
             METHOD: method
         }
-    };
-    do_request(request, url){
+    }
+    do_request(url, request){
         return fetch(url, request)
         .then(response => {
             if(response.status !== 200){
@@ -110,16 +115,10 @@ class Api {
                 data: response.json()
             }
         } )
-    };
-    set_auth(access_token){
-        Headers.set('Authorization', 'Bearer '+access_token);
     }
-    get_auth(){
-        return Headers.get('Authorization')
-    }
-    // func : (access_token) => {some code}
-    // window.__INITIAL_HEADERS__['Authorization']
-    registration( {username, password, email}, func) {
+
+
+    registration( {username, password, email}) {
         const response = this.do_request(
             this.make_request_object(arguments[0],'POST'),
             this.api_url+'/registration'
@@ -127,24 +126,24 @@ class Api {
         if(!response['error']){
             return response;
         }
-        func(response['data']['access_token'])
         return response;
-    };
-    login( {username, password}, func ){
+    }
+    login( {username, password} ){
         const response = this.do_request(
-            this.make_request_object(arguments[0],'POST'),
+            this.make_request_object(arguments[0],'GET'),//was post
             this.api_url+'/login'
         );
         if(!response['error']){
             return response;
         }
-        func(response['data']['access_token']);
         return response;
     }
+
+
     // TODO
-    create_todo(group_id, {title, text, deadline_date, status}){
+    create_todo( {title, text, deadline_date, status}, group_id){
         return this.do_request(
-            this.make_request_object(arguments[1], 'POST'),
+            this.make_request_object(arguments[0], 'POST'),
             this.api_url+'/api/create_todo/'+group_id
         )
     }
