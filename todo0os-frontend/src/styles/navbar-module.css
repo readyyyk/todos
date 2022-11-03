@@ -1,0 +1,16 @@
+@media (max-width: 460px) {
+    .input-group > .search-input{
+        width: 6em;
+    }
+}
+
+.hover-text-primary{
+    transition: color .3s ease;
+}
+.hover-text-primary:hover{
+    color:#0D6EFD;
+}
+
+.cursor-pointer{
+    cursor: pointer;
+}

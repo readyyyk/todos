@@ -1,0 +1,61 @@
+.tools-wrapper{
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    position: fixed;
+    z-index: -1;
+    background: rgba(0, 0, 0, 0);
+    opacity: 0;
+    
+    transition: all .7s ease;
+}
+.tools-wrapper.tools-active{
+    display: block;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    position: fixed;
+    z-index: 2;
+    background: rgba(0,0,0, .37);
+    opacity: 1;
+}
+.tools{
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    transition-duration: .4s;
+    z-index: -1;
+    opacity: 0;
+    display: none;
+}
+.tools.tools-active{
+    display: block;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 1;
+    z-index: 3;
+}
+.tools-bar__tools{
+    transition: all .3s ease;
+    cursor: pointer;
+    background: #f8f9fa;
+}
+.tools-bar__tools.submit:hover{
+    background: #198754;
+}
+.tools-bar__tools.delete:hover{
+    background: #dc3545;
+}
+.tools-bar__tools.cancel:hover{
+    background: #6c757d;
+}
+.dt-input{
+    border: 1px solid #c9c9c9;
+    border-radius: 5px;
+    width: 100%;
+}

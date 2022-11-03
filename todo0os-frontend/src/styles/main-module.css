@@ -1,0 +1,47 @@
+.card{
+    box-shadow: rgba(0, 0, 0, 0.17) 0px 1.5em 2em -.5em;
+}
+.card-header{
+    word-break: break-all;
+}
+.card-edit{
+    cursor: pointer;
+}
+
+fieldset{ border: 1.7px solid rgba(110, 110, 110, 0.7); border-radius: 5px; padding: 1em; }
+legend { float: none; width: fit-content; padding: .2em; margin-left: .7em; margin-right: .7em;}
+legend > h5{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    line-height: normal;
+    -webkit-line-clamp: 2;
+}
+
+main > fieldset > .card-wrapper{
+    flex-grow: 1;
+}
+
+main.horizontal > fieldset{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+main.horizontal > fieldset > .card-wrapper{
+    flex-grow:unset;
+}
+
+main.vertical > fieldset{
+    flex-wrap: nowrap;
+    flex-direction: column;
+    justify-content: center;
+    width: min-content;
+    height: min-content;
+}
+
+@media (max-width:724px) {
+    main > fieldset{
+        width: min-content;
+    }
+}
