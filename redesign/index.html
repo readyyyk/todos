@@ -85,159 +85,411 @@
         .cursor-pointer{
             cursor: pointer;
         }
+
+        fieldset{ border: 1.7px solid rgba(110, 110, 110, 0.7); border-radius: 5px; padding: 1em; }
+        legend { float: none; width: fit-content; padding: .2em; margin-left: .7em; margin-right: .7em;}
+        legend > h5{
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            line-height: normal;
+            -webkit-line-clamp: 2;
+        }
+
+
+
+        main > fieldset > .card-wrapper{
+            flex-grow: 1;
+        }
+
+        main.horizontal > fieldset{
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        main.horizontal > fieldset > .card-wrapper{
+            flex-grow:unset;
+        }
+
+        main.vertical > fieldset{
+            flex-wrap: nowrap;
+            flex-direction: column;
+            justify-content: center;
+            width: min-content;
+            height: min-content;
+        }
+        
+        @media (max-width:724px) {
+            main > fieldset{
+                width: min-content;
+            }
+        }
+
     </style>
 
     <title>redesign</title>
 </head>
-<body class="pLib-sb-Minimal pb-4">
+<body class="pLib-sb-Minimal pb-5">
 
-    <main class="container-fluid d-flex flex-wrap p-4" style="z-index: 2;">
+    
+    <main class="container-fluid d-flex flex-wrap px-2 px-sm-4 pb-4 justify-content-center   horizontal">
+        <fieldset class="bg-opacity-10 m-2 m-sm-3 mt-3 pb-0" style="background-color: rgb(241, 169, 163);">
+            <legend class="rounded-3 p-2 d-flex" style="background-color: rgb(201, 99, 89);">
+                <h5 class="my-0 me-3"> Group 1 </h5>
+                <div class="d-flex justify-content-center flex-wrap">
 
-        <div class="card-wrapper d-flex justify-content-center" style="flex-grow: 1; min-width: 15%;">
-            <div class="card px-0 overflow-auto pLib-sb-Minimal mb-4 mx-2" style="width: 18rem; max-height: 14rem;">
-                <div class="card-header d-flex justify-content-between align-items-center bg-opacity-25 bg-primary">
-                    <h5 class="mb-0">Card title</h5>
-                    <div class="d-flex align-items-center">
-                        <div class="btn-group me-1">
-                            <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                <ul class="dropdown-menu position-fixed">
+                    <!-- <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" >
+                                Dropdown button
+                            </button>
+                            
+                        </div> -->
+
+                    <button class="btn btn-light p-1 lh-sm mx-1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <!-- https://primer.style/octicons/paintbrush-16 -->
+                        <svg fill="rgb(201, 99, 89)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M12 18a6 6 0 100-12 6 6 0 000 12z"></path></svg>
+                        <ul class="dropdown-menu">
+                            <li> <div class="rounded-circle mx-2" style="border: 2.5px dotted #333; height: 1.3rem;width:1.3rem;background-color: #c96359;"></div> </li> <!-- #e9a49e -->
+                            <li> <div class="rounded-circle mx-2" style="border: 2.5px dotted #333; height: 1.3rem;width:1.3rem;background-color: #f0a958;"></div> </li> <!-- #e6c9a8 -->
+                            <li> <div class="rounded-circle mx-2" style="border: 2.5px dotted #333; height: 1.3rem;width:1.3rem;background-color: #7eb63d;"></div> </li> <!-- #ccff90 -->
+                            <li> <div class="rounded-circle mx-2" style="border: 2.5px dotted #333; height: 1.3rem;width:1.3rem;background-color: #569dad;"></div> </li> <!-- #cbf0f8 -->
+                            <li> <div class="rounded-circle mx-2" style="border: 2.5px dotted #333; height: 1.3rem;width:1.3rem;background-color: #a068d1;"></div> </li> <!-- #d7aefb -->
+                            <li> <div class="rounded-circle mx-2" style="border: 2.5px dotted #333; height: 1.3rem;width:1.3rem;background-color: #c9c9c9;"></div> </li> <!-- #838383 -->
+                        </ul>
+                    </button>
+                    
+                    <button class="btn btn-light p-1 lh-sm mx-1">
+                        <!-- https://primer.style/octicons/pencil-24 -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M17.263 2.177a1.75 1.75 0 012.474 0l2.586 2.586a1.75 1.75 0 010 2.474L19.53 10.03l-.012.013L8.69 20.378a1.75 1.75 0 01-.699.409l-5.523 1.68a.75.75 0 01-.935-.935l1.673-5.5a1.75 1.75 0 01.466-.756L14.476 4.963l2.787-2.786zm-2.275 4.371l-10.28 9.813a.25.25 0 00-.067.108l-1.264 4.154 4.177-1.271a.25.25 0 00.1-.059l10.273-9.806-2.94-2.939zM19 8.44l2.263-2.262a.25.25 0 000-.354l-2.586-2.586a.25.25 0 00-.354 0L16.061 5.5 19 8.44z"></path></svg>
+                    </button>
+                    <button class="btn btn-light p-1 lh-sm mx-1">
+                        <!-- https://primer.style/octicons/trash-24 -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M16 1.75V3h5.25a.75.75 0 010 1.5H2.75a.75.75 0 010-1.5H8V1.75C8 .784 8.784 0 9.75 0h4.5C15.216 0 16 .784 16 1.75zm-6.5 0a.25.25 0 01.25-.25h4.5a.25.25 0 01.25.25V3h-5V1.75z"></path><path d="M4.997 6.178a.75.75 0 10-1.493.144L4.916 20.92a1.75 1.75 0 001.742 1.58h10.684a1.75 1.75 0 001.742-1.581l1.413-14.597a.75.75 0 00-1.494-.144l-1.412 14.596a.25.25 0 01-.249.226H6.658a.25.25 0 01-.249-.226L4.997 6.178z"></path><path d="M9.206 7.501a.75.75 0 01.793.705l.5 8.5A.75.75 0 119 16.794l-.5-8.5a.75.75 0 01.705-.793zm6.293.793A.75.75 0 1014 8.206l-.5 8.5a.75.75 0 001.498.088l.5-8.5z"></path></svg>
+                    </button>
+                </div>
+            </legend>
+
+            <div class="card-wrapper d-flex justify-content-center"> 
+                <div class="card px-0 pLib-sb-Minimal mb-4 mx-2" style="width: 18rem; max-height: 14rem;">
+                    <div class="card-header d-flex justify-content-between align-items-center bg-opacity-25 bg-primary">
+                        <h5 class="mb-0">Card title</h5>
+                        <div class="d-flex align-items-center">
+                            <div class="btn-group me-1">
+                                <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <ul class="dropdown-menu flex-column" style="z-index: 1030;">
+                                        <li><a class="dropdown-item text-secondary" href="#"> passive </a></li>
+                                        <li><a class="dropdown-item bg-primary text-light" href="#"> in progress </a></li>
+                                        <li><a class="dropdown-item text-warning" href="#"> IMPORTNANT </a></li>
+                                        <li><a class="dropdown-item text-warning" href="#"> deadlines close </a></li>
+                                        <li><a class="dropdown-item text-success" href="#"> done </a></li>
+                                        <li><a class="dropdown-item text-danger" href="#"> too late </a></li>
+                                    </ul>
+                            </div>
+                            <div class="text-primary" style="text-shadow: #333 0px 0px .2px">  in progress </div>
+                        </div>
+                    </div>
+                    <div class="card-body overflow-auto pLib-sb-Minimal">
+                        <p class="card-text lh-sm" style="letter-spacing: .5px;">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro ea fuga placeat laborum maxime tempore, consectetur totam itaque saepe quae. Consequatur, esse beatae voluptates ea nemo ipsa veniam repellendus ipsam! Lorem ipsum dolor sit, amet consectetur adipisicing elit. Placeat fuga, atque architecto maxime qui expedita explicabo magnam consectetur pariatur voluptates quis molestiae quibusdam rem reprehenderit dolore sapiente amet, animi libero.</p>
+                    </div>
+                    <div class="card-footer fs-6 lh-1 text-secondary">
+                        <div class="row">
+                            <div class="col-5">
+                                <div class="w-100">16-11-2006</div>
+                                <div class="w-100">10:00</div>
+                            </div>
+                            <div class="col-2 p-0">
+                                <div
+                                    class="d-flex justify-content-center align-items-center
+                                            border border-secondary rounded-3 border-opacity-50
+                                            bg-light p-1 card-edit"
+                                    onclick="openEdit(this)"
+                                >
+                                    <!-- https://primer.style/octicons/pencil-24 -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M17.263 2.177a1.75 1.75 0 012.474 0l2.586 2.586a1.75 1.75 0 010 2.474L19.53 10.03l-.012.013L8.69 20.378a1.75 1.75 0 01-.699.409l-5.523 1.68a.75.75 0 01-.935-.935l1.673-5.5a1.75 1.75 0 01.466-.756L14.476 4.963l2.787-2.786zm-2.275 4.371l-10.28 9.813a.25.25 0 00-.067.108l-1.264 4.154 4.177-1.271a.25.25 0 00.1-.059l10.273-9.806-2.94-2.939zM19 8.44l2.263-2.262a.25.25 0 000-.354l-2.586-2.586a.25.25 0 00-.354 0L16.061 5.5 19 8.44z"></path></svg>
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <div class="w-100 text-end">16-11-2022</div>
+                                <div class="w-100 text-end">00:00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="card-wrapper d-flex justify-content-center">
+                <div class="card px-0 pLib-sb-Minimal mb-4 mx-2" style="width: 18rem; max-height: 14rem;">
+                    <div class="card-header d-flex justify-content-between align-items-center bg-opacity-25 bg-success">
+                        <h5 class="mb-0">Card title</h5>
+                        <div class="d-flex align-items-center">
+                            <div class="btn-group me-1">
+                                <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <ul class="dropdown-menu flex-column" style="z-index: 1030;">
+                                        <li><a class="dropdown-item text-secondary" href="#"> passive </a></li>
+                                        <li><a class="dropdown-item text-primary" href="#"> in progress </a></li>
+                                        <li><a class="dropdown-item text-warning" href="#"> IMPORTNANT </a></li>
+                                        <li><a class="dropdown-item text-warning" href="#"> deadlines close </a></li>
+                                        <li><a class="dropdown-item bg-success text-light" href="#"> done </a></li>
+                                        <li><a class="dropdown-item text-danger" href="#"> too late </a></li>
+                                    </ul>
+                            </div>
+                            <div class="text-success" style="text-shadow: #333 0px 0px .2px">  done </div>
+                        </div>
+                    </div>
+                    <div class="card-body overflow-auto pLib-sb-Minimal">
+                        <p class="card-text lh-sm" style="letter-spacing: .5px;"> sapiente amet, animi libero.</p>
+                    </div>
+                    <div class="card-footer fs-6 lh-1 text-secondary">
+                        <div class="row">
+                            <div class="col-5">
+                                <div class="w-100">16-11-2006</div>
+                                <div class="w-100">10:00</div>
+                            </div>
+                            <div class="col-2 p-0">
+                                <div
+                                    class="d-flex justify-content-center align-items-center
+                                            border border-secondary rounded-3 border-opacity-50
+                                            bg-light p-1 card-edit"
+                                    onclick="openEdit(this)"
+                                >
+                                    <!-- https://primer.style/octicons/pencil-24 -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M17.263 2.177a1.75 1.75 0 012.474 0l2.586 2.586a1.75 1.75 0 010 2.474L19.53 10.03l-.012.013L8.69 20.378a1.75 1.75 0 01-.699.409l-5.523 1.68a.75.75 0 01-.935-.935l1.673-5.5a1.75 1.75 0 01.466-.756L14.476 4.963l2.787-2.786zm-2.275 4.371l-10.28 9.813a.25.25 0 00-.067.108l-1.264 4.154 4.177-1.271a.25.25 0 00.1-.059l10.273-9.806-2.94-2.939zM19 8.44l2.263-2.262a.25.25 0 000-.354l-2.586-2.586a.25.25 0 00-.354 0L16.061 5.5 19 8.44z"></path></svg>
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <div class="w-100 text-end">16-11-2022</div>
+                                <div class="w-100 text-end">00:00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-wrapper d-flex justify-content-center" >
+                <div class="card px-0 pLib-sb-Minimal mb-4 mx-2" style="width: 18rem; max-height: 14rem;">
+                    <div class="card-header d-flex justify-content-between align-items-center bg-opacity-25 bg-warning">
+                        <h5 class="mb-0">Card title</h5>
+                        <div class="d-flex align-items-center">
+                            <div class="btn-group me-1">
+                                <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <ul class="dropdown-menu flex-column" style="z-index: 1030;">
                                     <li><a class="dropdown-item text-secondary" href="#"> passive </a></li>
-                                    <li><a class="dropdown-item bg-primary text-light" href="#"> in progress </a></li>
-                                    <li><a class="dropdown-item text-warning" href="#"> IMPORTNANT </a></li>
+                                    <li><a class="dropdown-item text-primary" href="#"> in progress </a></li>
+                                    <li><a class="dropdown-item bg-warning text-light" href="#"> IMPORTNANT </a></li>
                                     <li><a class="dropdown-item text-warning" href="#"> deadlines close </a></li>
                                     <li><a class="dropdown-item text-success" href="#"> done </a></li>
                                     <li><a class="dropdown-item text-danger" href="#"> too late </a></li>
                                 </ul>
-                        </div>
-                        <div class="text-primary" style="text-shadow: #333 0px 0px .2px">  in progress </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <p class="card-text lh-sm" style="letter-spacing: .5px;">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro ea fuga placeat laborum maxime tempore, consectetur totam itaque saepe quae. Consequatur, esse beatae voluptates ea nemo ipsa veniam repellendus ipsam! Lorem ipsum dolor sit, amet consectetur adipisicing elit. Placeat fuga, atque architecto maxime qui expedita explicabo magnam consectetur pariatur voluptates quis molestiae quibusdam rem reprehenderit dolore sapiente amet, animi libero.</p>
-                </div>
-                <div class="card-footer fs-6 lh-1 text-secondary">
-                    <div class="row">
-                        <div class="col-5">
-                            <div class="w-100">16-11-2006</div>
-                            <div class="w-100">10:00</div>
-                        </div>
-                        <div class="col-2 p-0">
-                            <div
-                                class="d-flex justify-content-center align-items-center
-                                        border border-secondary rounded-3 border-opacity-50
-                                        bg-light p-1 card-edit"
-                                onclick="openEdit(this)"
-                            >
-                                <!-- https://primer.style/octicons/pencil-24 -->
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M17.263 2.177a1.75 1.75 0 012.474 0l2.586 2.586a1.75 1.75 0 010 2.474L19.53 10.03l-.012.013L8.69 20.378a1.75 1.75 0 01-.699.409l-5.523 1.68a.75.75 0 01-.935-.935l1.673-5.5a1.75 1.75 0 01.466-.756L14.476 4.963l2.787-2.786zm-2.275 4.371l-10.28 9.813a.25.25 0 00-.067.108l-1.264 4.154 4.177-1.271a.25.25 0 00.1-.059l10.273-9.806-2.94-2.939zM19 8.44l2.263-2.262a.25.25 0 000-.354l-2.586-2.586a.25.25 0 00-.354 0L16.061 5.5 19 8.44z"></path></svg>
                             </div>
+                            <div class="text-warning" style="text-shadow: #333 0px 0px .2px"> IMPORTNANT </div>
                         </div>
-                        <div class="col-5">
-                            <div class="w-100 text-end">16-11-2022</div>
-                            <div class="w-100 text-end">00:00</div>
+                    </div>
+                    <div class="card-body overflow-auto pLib-sb-Minimal">
+                        <p class="card-text lh-sm" style="letter-spacing: .5px;">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro ea fuga placeat laborum maxime tempore, consectetur totam itaque saepe quae. Consequatur, esse </p>
+                    </div>
+                    <div class="card-footer fs-6 lh-1 text-secondary">
+                        <div class="row">
+                            <div class="col-5">
+                                <div class="w-100">16-11-2006</div>
+                                <div class="w-100">10:00</div>
+                            </div>
+                            <div class="col-2 p-0">
+                                <div
+                                    class="d-flex justify-content-center align-items-center
+                                            border border-secondary rounded-3 border-opacity-50
+                                            bg-light p-1 card-edit"
+                                    onclick="openEdit(this)"
+                                >
+                                    <!-- https://primer.style/octicons/pencil-24 -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M17.263 2.177a1.75 1.75 0 012.474 0l2.586 2.586a1.75 1.75 0 010 2.474L19.53 10.03l-.012.013L8.69 20.378a1.75 1.75 0 01-.699.409l-5.523 1.68a.75.75 0 01-.935-.935l1.673-5.5a1.75 1.75 0 01.466-.756L14.476 4.963l2.787-2.786zm-2.275 4.371l-10.28 9.813a.25.25 0 00-.067.108l-1.264 4.154 4.177-1.271a.25.25 0 00.1-.059l10.273-9.806-2.94-2.939zM19 8.44l2.263-2.262a.25.25 0 000-.354l-2.586-2.586a.25.25 0 00-.354 0L16.061 5.5 19 8.44z"></path></svg>
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <div class="w-100 text-end">16-11-2022</div>
+                                <div class="w-100 text-end">00:00</div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </fieldset>
+
+<!-- group 2 -->
+        <fieldset class="bg-opacity-10 m-3 pb-0" style="background-color: rgb(230, 201, 168);">
+            <legend class="rounded-3 p-2 d-flex justify-content-between" style="background-color: rgb(240, 169, 88); max-width: fit-content;">
+                <h5 class="my-0 me-3 overflow-hidden" style="max-width: 80%;"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus, excepturi? Reprehenderit, quisquam, autem consectetur recusandae hic, dicta commodi vitae error ipsa delectus velit maiores architecto est! Modi nulla illo molestias? </h5>
+                <div class="d-flex justify-content-end" style="height: min-content;">
+                    <button class="btn btn-light p-1 lh-sm mx-1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <!-- https://primer.style/octicons/paintbrush-16 -->
+                        <svg fill="#f0a958" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M12 18a6 6 0 100-12 6 6 0 000 12z"></path></svg>
+                        <ul class="dropdown-menu">
+                            <li> <div class="rounded-circle mx-2" style="border: 2.5px dotted #333; height: 1.3rem;width:1.3rem;background-color: #c96359;"></div> </li> <!-- #e9a49e -->
+                            <li> <div class="rounded-circle mx-2" style="border: 2.5px dotted #333; height: 1.3rem;width:1.3rem;background-color: #f0a958;"></div> </li> <!-- #e6c9a8 -->
+                            <li> <div class="rounded-circle mx-2" style="border: 2.5px dotted #333; height: 1.3rem;width:1.3rem;background-color: #7eb63d;"></div> </li> <!-- #ccff90 -->
+                            <li> <div class="rounded-circle mx-2" style="border: 2.5px dotted #333; height: 1.3rem;width:1.3rem;background-color: #569dad;"></div> </li> <!-- #cbf0f8 -->
+                            <li> <div class="rounded-circle mx-2" style="border: 2.5px dotted #333; height: 1.3rem;width:1.3rem;background-color: #a068d1;"></div> </li> <!-- #d7aefb -->
+                            <li> <div class="rounded-circle mx-2" style="border: 2.5px dotted #333; height: 1.3rem;width:1.3rem;background-color: #c9c9c9;"></div> </li> <!-- #838383 -->
+                        </ul>
+                    </button>
+                    <button class="btn btn-light p-1 lh-sm mx-1">
+                        <!-- https://primer.style/octicons/pencil-24 -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M17.263 2.177a1.75 1.75 0 012.474 0l2.586 2.586a1.75 1.75 0 010 2.474L19.53 10.03l-.012.013L8.69 20.378a1.75 1.75 0 01-.699.409l-5.523 1.68a.75.75 0 01-.935-.935l1.673-5.5a1.75 1.75 0 01.466-.756L14.476 4.963l2.787-2.786zm-2.275 4.371l-10.28 9.813a.25.25 0 00-.067.108l-1.264 4.154 4.177-1.271a.25.25 0 00.1-.059l10.273-9.806-2.94-2.939zM19 8.44l2.263-2.262a.25.25 0 000-.354l-2.586-2.586a.25.25 0 00-.354 0L16.061 5.5 19 8.44z"></path></svg>
+                    </button>
+                    <button class="btn btn-light p-1 lh-sm mx-1">
+                        <!-- https://primer.style/octicons/trash-24 -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M16 1.75V3h5.25a.75.75 0 010 1.5H2.75a.75.75 0 010-1.5H8V1.75C8 .784 8.784 0 9.75 0h4.5C15.216 0 16 .784 16 1.75zm-6.5 0a.25.25 0 01.25-.25h4.5a.25.25 0 01.25.25V3h-5V1.75z"></path><path d="M4.997 6.178a.75.75 0 10-1.493.144L4.916 20.92a1.75 1.75 0 001.742 1.58h10.684a1.75 1.75 0 001.742-1.581l1.413-14.597a.75.75 0 00-1.494-.144l-1.412 14.596a.25.25 0 01-.249.226H6.658a.25.25 0 01-.249-.226L4.997 6.178z"></path><path d="M9.206 7.501a.75.75 0 01.793.705l.5 8.5A.75.75 0 119 16.794l-.5-8.5a.75.75 0 01.705-.793zm6.293.793A.75.75 0 1014 8.206l-.5 8.5a.75.75 0 001.498.088l.5-8.5z"></path></svg>
+                    </button>
+                </div>
+            </legend>
+
+            <div class="card-wrapper d-flex justify-content-center" >
+                <div class="card px-0 pLib-sb-Minimal mb-4 mx-2" style="width: 18rem; max-height: 14rem;">
+                    <div class="card-header d-flex justify-content-between align-items-center bg-opacity-25 bg-primary">
+                        <h5 class="mb-0">Card title</h5>
+                        <div class="d-flex align-items-center">
+                            <div class="btn-group me-1">
+                                <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <ul class="dropdown-menu flex-column" style="z-index: 1030;">
+                                        <li><a class="dropdown-item text-secondary" href="#"> passive </a></li>
+                                        <li><a class="dropdown-item bg-primary text-light" href="#"> in progress </a></li>
+                                        <li><a class="dropdown-item text-warning" href="#"> IMPORTNANT </a></li>
+                                        <li><a class="dropdown-item text-warning" href="#"> deadlines close </a></li>
+                                        <li><a class="dropdown-item text-success" href="#"> done </a></li>
+                                        <li><a class="dropdown-item text-danger" href="#"> too late </a></li>
+                                    </ul>
+                            </div>
+                            <div class="text-primary" style="text-shadow: #333 0px 0px .2px">  in progress </div>
+                        </div>
+                    </div>
+                    <div class="card-body overflow-auto pLib-sb-Minimal">
+                        <p class="card-text lh-sm" style="letter-spacing: .5px;">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro ea fuga placeat laborum maxime tempore, consectetur totam itaque saepe quae. Consequatur, esse beatae voluptates ea nemo ipsa veniam repellendus ipsam! Lorem ipsum dolor sit, amet consectetur adipisicing elit. Placeat fuga, atque architecto maxime qui expedita explicabo magnam consectetur pariatur voluptates quis molestiae quibusdam rem reprehenderit dolore sapiente amet, animi libero.</p>
+                    </div>
+                    <div class="card-footer fs-6 lh-1 text-secondary">
+                        <div class="row">
+                            <div class="col-5">
+                                <div class="w-100">16-11-2006</div>
+                                <div class="w-100">10:00</div>
+                            </div>
+                            <div class="col-2 p-0">
+                                <div
+                                    class="d-flex justify-content-center align-items-center
+                                            border border-secondary rounded-3 border-opacity-50
+                                            bg-light p-1 card-edit"
+                                    onclick="openEdit(this)"
+                                >
+                                    <!-- https://primer.style/octicons/pencil-24 -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M17.263 2.177a1.75 1.75 0 012.474 0l2.586 2.586a1.75 1.75 0 010 2.474L19.53 10.03l-.012.013L8.69 20.378a1.75 1.75 0 01-.699.409l-5.523 1.68a.75.75 0 01-.935-.935l1.673-5.5a1.75 1.75 0 01.466-.756L14.476 4.963l2.787-2.786zm-2.275 4.371l-10.28 9.813a.25.25 0 00-.067.108l-1.264 4.154 4.177-1.271a.25.25 0 00.1-.059l10.273-9.806-2.94-2.939zM19 8.44l2.263-2.262a.25.25 0 000-.354l-2.586-2.586a.25.25 0 00-.354 0L16.061 5.5 19 8.44z"></path></svg>
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <div class="w-100 text-end">16-11-2022</div>
+                                <div class="w-100 text-end">00:00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 
-        <div class="card-wrapper d-flex justify-content-center" style="flex-grow: 1; min-width: 15%;">
-            <div class="card px-0 overflow-auto pLib-sb-Minimal mb-4 mx-2" style="width: 18rem; max-height: 14rem;">
-                <div class="card-header d-flex justify-content-between align-items-center bg-opacity-25 bg-success">
-                    <h5 class="mb-0">Card title</h5>
-                    <div class="d-flex align-items-center">
-                        <div class="btn-group me-1">
-                            <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                <ul class="dropdown-menu position-fixed">
+            <div class="card-wrapper d-flex justify-content-center" >
+                <div class="card px-0 pLib-sb-Minimal mb-4 mx-2" style="width: 18rem; max-height: 14rem;">
+                    <div class="card-header d-flex justify-content-between align-items-center bg-opacity-25 bg-success">
+                        <h5 class="mb-0">Card title</h5>
+                        <div class="d-flex align-items-center">
+                            <div class="btn-group me-1">
+                                <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <ul class="dropdown-menu flex-column" style="z-index: 1030;">
+                                        <li><a class="dropdown-item text-secondary" href="#"> passive </a></li>
+                                        <li><a class="dropdown-item text-primary" href="#"> in progress </a></li>
+                                        <li><a class="dropdown-item text-warning" href="#"> IMPORTNANT </a></li>
+                                        <li><a class="dropdown-item text-warning" href="#"> deadlines close </a></li>
+                                        <li><a class="dropdown-item bg-success text-light" href="#"> done </a></li>
+                                        <li><a class="dropdown-item text-danger" href="#"> too late </a></li>
+                                    </ul>
+                            </div>
+                            <div class="text-success" style="text-shadow: #333 0px 0px .2px">  done </div>
+                        </div>
+                    </div>
+                    <div class="card-body overflow-auto pLib-sb-Minimal">
+                        <p class="card-text lh-sm" style="letter-spacing: .5px;"> sapiente amet, animi libero.</p>
+                    </div>
+                    <div class="card-footer fs-6 lh-1 text-secondary">
+                        <div class="row">
+                            <div class="col-5">
+                                <div class="w-100">16-11-2006</div>
+                                <div class="w-100">10:00</div>
+                            </div>
+                            <div class="col-2 p-0">
+                                <div
+                                    class="d-flex justify-content-center align-items-center
+                                            border border-secondary rounded-3 border-opacity-50
+                                            bg-light p-1 card-edit"
+                                    onclick="openEdit(this)"
+                                >
+                                    <!-- https://primer.style/octicons/pencil-24 -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M17.263 2.177a1.75 1.75 0 012.474 0l2.586 2.586a1.75 1.75 0 010 2.474L19.53 10.03l-.012.013L8.69 20.378a1.75 1.75 0 01-.699.409l-5.523 1.68a.75.75 0 01-.935-.935l1.673-5.5a1.75 1.75 0 01.466-.756L14.476 4.963l2.787-2.786zm-2.275 4.371l-10.28 9.813a.25.25 0 00-.067.108l-1.264 4.154 4.177-1.271a.25.25 0 00.1-.059l10.273-9.806-2.94-2.939zM19 8.44l2.263-2.262a.25.25 0 000-.354l-2.586-2.586a.25.25 0 00-.354 0L16.061 5.5 19 8.44z"></path></svg>
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <div class="w-100 text-end">16-11-2022</div>
+                                <div class="w-100 text-end">00:00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-wrapper d-flex justify-content-center" >
+                <div class="card px-0 pLib-sb-Minimal mb-4 mx-2" style="width: 18rem; max-height: 14rem;">
+                    <div class="card-header d-flex justify-content-between align-items-center bg-opacity-25 bg-warning">
+                        <h5 class="mb-0">Card title</h5>
+                        <div class="d-flex align-items-center">
+                            <div class="btn-group me-1">
+                                <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <ul class="dropdown-menu flex-column" style="z-index: 1030;">
                                     <li><a class="dropdown-item text-secondary" href="#"> passive </a></li>
                                     <li><a class="dropdown-item text-primary" href="#"> in progress </a></li>
-                                    <li><a class="dropdown-item text-warning" href="#"> IMPORTNANT </a></li>
+                                    <li><a class="dropdown-item bg-warning text-light" href="#"> IMPORTNANT </a></li>
                                     <li><a class="dropdown-item text-warning" href="#"> deadlines close </a></li>
-                                    <li><a class="dropdown-item bg-success text-light" href="#"> done </a></li>
+                                    <li><a class="dropdown-item text-success" href="#"> done </a></li>
                                     <li><a class="dropdown-item text-danger" href="#"> too late </a></li>
                                 </ul>
-                        </div>
-                        <div class="text-success" style="text-shadow: #333 0px 0px .2px">  done </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <p class="card-text lh-sm" style="letter-spacing: .5px;"> sapiente amet, animi libero.</p>
-                </div>
-                <div class="card-footer fs-6 lh-1 text-secondary">
-                    <div class="row">
-                        <div class="col-5">
-                            <div class="w-100">16-11-2006</div>
-                            <div class="w-100">10:00</div>
-                        </div>
-                        <div class="col-2 p-0">
-                            <div
-                                class="d-flex justify-content-center align-items-center
-                                        border border-secondary rounded-3 border-opacity-50
-                                        bg-light p-1 card-edit"
-                                onclick="openEdit(this)"
-                            >
-                                <!-- https://primer.style/octicons/pencil-24 -->
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M17.263 2.177a1.75 1.75 0 012.474 0l2.586 2.586a1.75 1.75 0 010 2.474L19.53 10.03l-.012.013L8.69 20.378a1.75 1.75 0 01-.699.409l-5.523 1.68a.75.75 0 01-.935-.935l1.673-5.5a1.75 1.75 0 01.466-.756L14.476 4.963l2.787-2.786zm-2.275 4.371l-10.28 9.813a.25.25 0 00-.067.108l-1.264 4.154 4.177-1.271a.25.25 0 00.1-.059l10.273-9.806-2.94-2.939zM19 8.44l2.263-2.262a.25.25 0 000-.354l-2.586-2.586a.25.25 0 00-.354 0L16.061 5.5 19 8.44z"></path></svg>
                             </div>
+                            <div class="text-warning" style="text-shadow: #333 0px 0px .2px"> IMPORTNANT </div>
                         </div>
-                        <div class="col-5">
-                            <div class="w-100 text-end">16-11-2022</div>
-                            <div class="w-100 text-end">00:00</div>
+                    </div>
+                    <div class="card-body overflow-auto pLib-sb-Minimal">
+                        <p class="card-text lh-sm" style="letter-spacing: .5px;">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro ea fuga placeat laborum maxime tempore, consectetur totam itaque saepe quae. Consequatur, esse </p>
+                    </div>
+                    <div class="card-footer fs-6 lh-1 text-secondary">
+                        <div class="row">
+                            <div class="col-5">
+                                <div class="w-100">16-11-2006</div>
+                                <div class="w-100">10:00</div>
+                            </div>
+                            <div class="col-2 p-0">
+                                <div
+                                    class="d-flex justify-content-center align-items-center
+                                            border border-secondary rounded-3 border-opacity-50
+                                            bg-light p-1 card-edit"
+                                    onclick="openEdit(this)"
+                                >
+                                    <!-- https://primer.style/octicons/pencil-24 -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M17.263 2.177a1.75 1.75 0 012.474 0l2.586 2.586a1.75 1.75 0 010 2.474L19.53 10.03l-.012.013L8.69 20.378a1.75 1.75 0 01-.699.409l-5.523 1.68a.75.75 0 01-.935-.935l1.673-5.5a1.75 1.75 0 01.466-.756L14.476 4.963l2.787-2.786zm-2.275 4.371l-10.28 9.813a.25.25 0 00-.067.108l-1.264 4.154 4.177-1.271a.25.25 0 00.1-.059l10.273-9.806-2.94-2.939zM19 8.44l2.263-2.262a.25.25 0 000-.354l-2.586-2.586a.25.25 0 00-.354 0L16.061 5.5 19 8.44z"></path></svg>
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <div class="w-100 text-end">16-11-2022</div>
+                                <div class="w-100 text-end">00:00</div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </fieldset>
 
-        <div class="card-wrapper d-flex justify-content-center" style="flex-grow: 1; min-width: 15%;">
-            <div class="card px-0 overflow-auto pLib-sb-Minimal mb-4 mx-2" style="width: 18rem; max-height: 14rem;">
-                <div class="card-header d-flex justify-content-between align-items-center bg-opacity-25 bg-warning">
-                    <h5 class="mb-0">Card title</h5>
-                    <div class="d-flex align-items-center">
-                        <div class="btn-group me-1">
-                            <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                            <ul class="dropdown-menu position-fixed">
-                                <li><a class="dropdown-item text-secondary" href="#"> passive </a></li>
-                                <li><a class="dropdown-item text-primary" href="#"> in progress </a></li>
-                                <li><a class="dropdown-item bg-warning text-light" href="#"> IMPORTNANT </a></li>
-                                <li><a class="dropdown-item text-warning" href="#"> deadlines close </a></li>
-                                <li><a class="dropdown-item text-success" href="#"> done </a></li>
-                                <li><a class="dropdown-item text-danger" href="#"> too late </a></li>
-                            </ul>
-                        </div>
-                        <div class="text-warning" style="text-shadow: #333 0px 0px .2px"> IMPORTNANT </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <p class="card-text lh-sm" style="letter-spacing: .5px;">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro ea fuga placeat laborum maxime tempore, consectetur totam itaque saepe quae. Consequatur, esse </p>
-                </div>
-                <div class="card-footer fs-6 lh-1 text-secondary">
-                    <div class="row">
-                        <div class="col-5">
-                            <div class="w-100">16-11-2006</div>
-                            <div class="w-100">10:00</div>
-                        </div>
-                        <div class="col-2 p-0">
-                            <div
-                                class="d-flex justify-content-center align-items-center
-                                        border border-secondary rounded-3 border-opacity-50
-                                        bg-light p-1 card-edit"
-                                onclick="openEdit(this)"
-                            >
-                                <!-- https://primer.style/octicons/pencil-24 -->
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M17.263 2.177a1.75 1.75 0 012.474 0l2.586 2.586a1.75 1.75 0 010 2.474L19.53 10.03l-.012.013L8.69 20.378a1.75 1.75 0 01-.699.409l-5.523 1.68a.75.75 0 01-.935-.935l1.673-5.5a1.75 1.75 0 01.466-.756L14.476 4.963l2.787-2.786zm-2.275 4.371l-10.28 9.813a.25.25 0 00-.067.108l-1.264 4.154 4.177-1.271a.25.25 0 00.1-.059l10.273-9.806-2.94-2.939zM19 8.44l2.263-2.262a.25.25 0 000-.354l-2.586-2.586a.25.25 0 00-.354 0L16.061 5.5 19 8.44z"></path></svg>
-                            </div>
-                        </div>
-                        <div class="col-5">
-                            <div class="w-100 text-end">16-11-2022</div>
-                            <div class="w-100 text-end">00:00</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    
     </main>
 
 
@@ -258,9 +510,10 @@
                             <input type="time" class="dt-input" value="10:00" title="Start time">
                         </div>
                         
-                        <div class="col-2 p-0 d-flex justify-content-center align-items-center">
+                        <!-- <div class="col-2 p-0 d-flex justify-content-center align-items-center">
                                 <input type="color" class="w-75 h-75 border-0 card-edit" value="#ffffff" title="bg color">
-                        </div>
+                        </div> -->
+                        <div class="col-2"></div>
 
                         <div class="col-5 d-flex justify-content-end flex-wrap">
                             <input type="date" class="text-end dt-input mb-2" value="2022-11-16" title="Deadline date" min="2022-10-31">
@@ -435,4 +688,3 @@
 
 </body>
 </html>
-
