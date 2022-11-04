@@ -63,84 +63,92 @@
 // Api.{query}( {data}, {headers} )
 
 const link = 'localhost'
-const port = 5000
+const port = 8000
 
 class Api {
     
     constructor() {
         this.api_url = `http://${link}:${port}`
-        this.headers = {}
+        this.token = document.cookie
+            .split(';')
+            .find(cookie => {
+                cookie.startsWith('Authorization=')
+            })
+            ?.split('Authorization=')[1]
+            .split(',')[0];
     }
 
-    /*
-    // AUTH
-    set_headers (headersData){
-        this.headers = {
-            'accept': 'application/json',
-            'Content-Type': 'application/json'
+     get headers(){
+        let headers_stack = {
+            Accept: 'application/json',
+            'Content-Type': 'application/json;charset=utf-8',
+            'Accept-Language': undefined,
+            'Content-Language': undefined,
+            'Access-Control-Allow-Origin': this.api_url,
         }
-        if( !headersData.has('Authorization') ) {
-            this.headers['Authorization'] = this.get_auth()
-        }
+        if(this.token !== null) headers_stack['Authorization'] = `Bearer ${this.token}`;
+        return headers_stack;
     }
-    set_auth(access_token){
-        Headers.set('Authorization', 'Bearer '+access_token);
-    }
-    get_auth(){
-        return Headers.get('Authorization')
-    }
-    */
 
-    make_request_object(body, method = 'POST'){
-        return {
-            body: body,
+    make_request_object({body, method = 'POST'}) {
+        let request_default = {
             headers: this.headers,
-            METHOD: method
-        }
+            method: method,
+        };
+        if (method !== 'GET' && method !== 'HEAD') request_default.body = body;
+        return request_default;
     }
-    do_request(url, request){
+
+    do_request(request, url){
         return fetch(url, request)
-        .then(response => {
-            if(response.status !== 200){
-                return {
-                    error: true,   
-                    info: {
-                        status_code: response.status,
-                        text: response.text()
+            .then(response => {
+                console.log(response)
+                if (response.status !== 200) {
+                    return {
+                        error: true,
+                        info: {
+                            status_code: response.status,
+                            text: response.text()
+                        }
                     }
                 }
-            }
-            return {
-                error: false,
-                data: response.json()
-            }
-        } )
+                return {
+                    error: false,
+                    data: response.json()
+                }
+            })
     }
 
-
-    registration( {username, password, email}) {
+    registration( {username, password}) {
         const response = this.do_request(
-            this.make_request_object(arguments[0],'POST'),
+            this.make_request_object({
+                body: arguments[0],
+                method:'POST'
+            }),
             this.api_url+'/registration'
-        );
+        ).then((response) => response);
         if(!response['error']){
-            return response;
+            let access_token = (response.data.catch())['access_token']
+            document.cookie = `Authorization=${access_token}, path='/';`
         }
         return response;
     }
     login( {username, password} ){
         const response = this.do_request(
-            this.make_request_object(arguments[0],'GET'),//was post
-            this.api_url+'/login'
-        );
+            this.make_request_object({
+                body: '',
+                method: 'GET'
+            }),//was post
+            this.api_url+`/login?username=${username}&password=${password}`
+        ).then((response) => response);
         if(!response['error']){
-            return response;
+            let access_token = (response.then(response => response.data)).then(data => data['access_token'])
+            document.cookie = `Authorization=${access_token}, path='/';`
         }
         return response;
     }
 
 
-    // TODO
     create_todo( {title, text, deadline_date, status}, group_id){
         return this.do_request(
             this.make_request_object(arguments[0], 'POST'),
@@ -182,4 +190,4 @@ class Api {
     }
 }
 
-export default new Api()
+export default new Api();
