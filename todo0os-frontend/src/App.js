@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import './styles/reset.css'
 import NavbarComponent from "./components/navbarComponent";
+import TodosListComponent from "./components/todosListComponent";
 
 const server = {
     ip: '127.0.0.1',
@@ -10,7 +11,7 @@ const apiLink = `http://${server.ip}:${server.port}`
 
 function App() {
 
-    const [showTaskList, setShowTaskList] = useState(false)
+    const [showTodosList, setShowTodosList] = useState(false)
 
     // useEffect( () => {
     //     // cookies
@@ -28,9 +29,9 @@ function App() {
 
             </main>
 
-            <NavbarComponent setShowTaskList={setShowTaskList}/>
+            <NavbarComponent setShowTodosList={setShowTodosList}/>
 
-            {/*<TodosListComponent/>*/}
+            <TodosListComponent show={showTodosList} setShow={setShowTodosList}/>
 
         </>
     )
