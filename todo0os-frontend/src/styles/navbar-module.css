@@ -1,0 +1,26 @@
+@media (max-width: 460px) {
+    .input-group > .search-input{
+        width: 6em;
+    }
+}
+
+.hover-text-primary{
+    transition: all .3s ease;
+}
+.hover-text-primary:hover{
+    color: #0D6EFD;
+    fill: #0D6EFD;
+}
+
+.cursor-pointer{
+    cursor: pointer;
+}
+
+.dropdown-item:hover{
+    background: inherit;
+}
+.dropdown-menu.show{
+    bottom: 35% !important;
+    display: flex;
+    flex-direction: column-reverse;
+}
