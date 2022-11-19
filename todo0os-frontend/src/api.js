@@ -61,6 +61,9 @@
 
 // Api.set_headers(headersData)
 // Api.{query}( {data}, {headers} )
+//            ^
+// Deprecated |
+
 
 const link = 'localhost'
 const port = 8000
@@ -69,12 +72,13 @@ class Api {
     
     constructor() {
         this.api_url = `http://${link}:${port}`
-        this.token = document.cookie
-            .split(';')
-            .find(cookie => {
-                cookie.startsWith('Authorization=')
-            })
-            ?.split('Authorization=')[1]
+
+    }
+
+    get token() {
+        return document.cookie
+            .split(';')[0]
+            .split('Authorization=')[1]
             .split(',')[0];
     }
 
@@ -82,8 +86,6 @@ class Api {
         let headers_stack = {
             Accept: 'application/json',
             'Content-Type': 'application/json;charset=utf-8',
-            'Accept-Language': undefined,
-            'Content-Language': undefined,
             'Access-Control-Allow-Origin': this.api_url,
         }
         if(this.token !== null) headers_stack['Authorization'] = `Bearer ${this.token}`;
@@ -95,14 +97,15 @@ class Api {
             headers: this.headers,
             method: method,
         };
-        if (method !== 'GET' && method !== 'HEAD') request_default.body = body;
+        if(method !== 'HEAD' && method !== 'GET')request_default.body = JSON.stringify(body);
         return request_default;
     }
 
     do_request(request, url){
+        console.log(request)
+        console.log(url)
         return fetch(url, request)
             .then(response => {
-                console.log(response)
                 if (response.status !== 200) {
                     return {
                         error: true,
@@ -119,7 +122,7 @@ class Api {
             })
     }
 
-    registration( {username, password}) {
+    registration( {username, password} ) {
         const response = this.do_request(
             this.make_request_object({
                 body: arguments[0],
@@ -128,42 +131,45 @@ class Api {
             this.api_url+'/registration'
         ).then((response) => response);
         if(!response['error']){
-            let access_token = (response.data.catch())['access_token']
+            let access_token = response.data['access_token']
             document.cookie = `Authorization=${access_token}, path='/';`
         }
         return response;
     }
     login( {username, password} ){
-        const response = this.do_request(
+        return this.do_request(
             this.make_request_object({
                 body: '',
                 method: 'GET'
             }),//was post
             this.api_url+`/login?username=${username}&password=${password}`
-        ).then((response) => response);
-        if(!response['error']){
-            let access_token = (response.then(response => response.data)).then(data => data['access_token'])
-            document.cookie = `Authorization=${access_token}, path='/';`
-        }
-        return response;
+        ).then((response) => {
+            if(!response['error']){
+                response.data.then((json) => {
+                    let access_token = json['access_token']
+                    document.cookie = `Authorization=${access_token}, path='/';`
+                })
+            }
+            return response;
+        }).finally()
     }
 
 
-    create_todo( {title, text, deadline_date, status}, group_id){
+    create_todo( {title, text, deadline_date, start_date, status}, group_id){
         return this.do_request(
-            this.make_request_object(arguments[0], 'POST'),
+            this.make_request_object({body: arguments[0]}),
             this.api_url+'/api/create_todo/'+group_id
         )
     }
     update_status(todo_id, status){
         return this.do_request(
-            this.make_request_object({'status': status},'POST'),
+            this.make_request_object({body: {'status': status}}),
             this.api_url+'/api/update_status/'+todo_id
         )
     }
     delete_todo(todo_id){
         return this.do_request(
-            this.make_request_object({},'DELETE'),
+            this.make_request_object({body:{},method: 'DELETE'}),
             this.api_url+'/api/delete_todo/'+todo_id
         )
     }
@@ -172,19 +178,22 @@ class Api {
     // GROUPS
     get_groups(){
         return this.do_request(
-            this.make_request_object({}, 'GET'),
+            this.make_request_object({
+                body: '',
+                method: 'GET'
+            }),
             this.api_url+'/api/groups'
         )
     }    
-    create_group( {group_title, background_color, title_color, text_shadow} ) {
+    create_group( {title, color_scheme} ) {
         return this.do_request(
-            this.make_request_object(arguments[0],'POST'),
+            this.make_request_object({body : arguments[0]}),
             this.api_url+'/api/create_group'
         )
     }
     delete_group(group_id){
         return this.do_request(
-            this.make_request_object({}, 'DELETE'),
+            this.make_request_object({body: {}, method: 'DELETE'}),
             this.api_url+'/api/delete_group/'+group_id
         ) 
     }
