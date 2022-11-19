@@ -36,6 +36,7 @@ const TodosListComponent = ({show, setShow}) => {
             </li>
         </ul>
     </div>
+{/*!!!!! DEMO END !!!!!*/}
 
             </Offcanvas.Body>
         </Offcanvas>
