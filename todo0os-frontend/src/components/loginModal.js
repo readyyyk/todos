@@ -24,6 +24,7 @@ const LoginModal = ({show, setShow, goReg}) => {
             setPasswordFeedback('Please enter password')
         } else {
             //api query
+            setShow(false)
         }
     }
 
@@ -49,11 +50,11 @@ const LoginModal = ({show, setShow, goReg}) => {
                 </Form>
                 <div className="w-100 d-flex justify-content-between align-items-end">
                     <div>
-                        <Button variant="secondary" onClick={()=>setShow(false)} className='me-2'>
-                            Close
-                        </Button>
-                        <Button variant="primary" onClick={()=>handleSubmit()}>
+                        <Button variant="primary" onClick={()=>handleSubmit()} className='me-2'>
                             Login
+                        </Button>
+                        <Button variant="secondary" onClick={()=>setShow(false)}>
+                            Close
                         </Button>
                     </div>
                     <span className='text-secondary'> Already have an account? <a href='#' onClick={()=>{setShow(false); goReg(true)}}> Sign up </a> </span>

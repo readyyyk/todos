@@ -26,11 +26,9 @@ const RegModal = ({show, setShow, goLogin}) => {
             p1 = password1El.current.value,
             p2 = password2El.current.value
 
-
         if(!username){
             setUsernameFeedback('please choose a username')
         } else if(!format.test(username)){
-            usernameEl.current.classList.add('is-invalid')
             setUsernameFeedback('username should contain only latin letters, numbers and underscore')
         } else if(p1.length < 4){
             setPassword1Feedback('passwords should contain at least 4 symbols')
@@ -48,6 +46,7 @@ const RegModal = ({show, setShow, goLogin}) => {
                     } else {
                         console.log(`registered successfully u:${username} p:${p1}`)
                         // pop up registered successfully
+                        setShow(false)
                     }
                 }
             )
