@@ -9,7 +9,7 @@ import LoginModal from "./components/loginModal"
 import RegModal from "./components/regModal"
 import SignoutModal from "./components/signoutModal";
 
-import TodoToast from "./components/toast";
+import TodosToast from "./components/todosToast";
 
 import Api from './api'
 
@@ -21,7 +21,7 @@ function App() {
     const [signoutModalShow, setSignoutModalShow] = useState(false)
     const [regModalShow, setRegModalShow] = useState(false)
 
-    const [toastData, setToastData] = useState({show:true, data:{color:'success', text:''}})
+    const [toastData, setToastData] = useState({show:true, data:{color:'success', text:'template text', textColor:'light'}})
 
 
 
@@ -58,13 +58,13 @@ function App() {
 
             <NavbarComponent setShowTodosList={setShowTodosList} showLoginModal={setLoginModalShow} showRegModal={setRegModalShow} showLogoutModal={setSignoutModalShow}/>
 
-            <LoginModal show={loginModalShow} setShow={setLoginModalShow} goReg={setRegModalShow} />
-            <RegModal show={regModalShow} setShow={setRegModalShow} goLogin={setLoginModalShow}/>
-            <SignoutModal show={signoutModalShow} setShow={setSignoutModalShow}/>
+            <LoginModal show={loginModalShow} setShow={setLoginModalShow} goReg={setRegModalShow} setToast={setToastData}/>
+            <RegModal show={regModalShow} setShow={setRegModalShow} goLogin={setLoginModalShow} setToast={setToastData}/>
+            <SignoutModal show={signoutModalShow} setShow={setSignoutModalShow} setToast={setToastData}/>
 
             <TodosListComponent show={showTodosList} setShow={setShowTodosList}/>
 
-            <TodoToast show={toastData.show} setShow={setToastData} data={toastData.data}/>
+            <TodosToast show={toastData.show} setShow={setToastData} data={toastData.data}/>
         </>
     )
 }

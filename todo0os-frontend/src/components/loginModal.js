@@ -3,13 +3,14 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from "react-bootstrap/Form";
 
-const LoginModal = ({show, setShow, goReg}) => {
+import Api from '../api'
+
+const LoginModal = ({show, setShow, goReg, setToast}) => {
 
     const usernameEl = useRef(),
         passwordEl = useRef(),
         [usernameFeedback, setUsernameFeedback] = useState(''),
         [passwordFeedback, setPasswordFeedback] = useState('')
-
 
     const handleSubmit = () => {
         const username = usernameEl.current.value,
@@ -24,7 +25,19 @@ const LoginModal = ({show, setShow, goReg}) => {
             setPasswordFeedback('Please enter password')
         } else {
             //api query
-            setShow(false)
+            Api.login({username: username, password: password} )
+                .then( (res)=>{
+                    if(!res.error){
+                        setShow(false)
+                        setToast({show:true, data:{color:'danger', text:'pop up sth went wrong...', textColor:'light'}})
+                    } else {
+                        setToast({show:true, data:{color:'success', text:'Successfully logged in', textColor:'light'}})
+                    }
+                } )
+                .catch( (err)=>{
+                    setToast({show:true, data:{color:'danger', text:'pop up sth went wrong...  (during login)', textColor:'light'}})
+                    throw err
+                } )
         }
     }
 

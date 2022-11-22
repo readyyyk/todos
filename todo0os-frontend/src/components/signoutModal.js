@@ -1,13 +1,13 @@
-import React from 'react';
+import React from 'react'
 
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import Form from "react-bootstrap/Form";
+import Button from 'react-bootstrap/Button'
+import Modal from 'react-bootstrap/Modal'
 
-const SignoutModal = ({show, setShow}) => {
+const SignoutModal = ({show, setShow, setToast}) => {
 
     const handleSubmit = () => {
         document.cookie = ''
+        setToast({show:true, data:{color:'success', text:'Successfully signed out', textColor:'light'}})
         setShow(false)
     }
 
@@ -17,7 +17,7 @@ const SignoutModal = ({show, setShow}) => {
                 <Modal.Title> Sign out </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <span className='fs-3'> Are you sure? </span>
+                <span className='fs-4'> Are you sure? </span>
                 <div className='mt-3'>
                     <Button variant="danger" onClick={()=>handleSubmit()} className='me-2'>
                         Sign out

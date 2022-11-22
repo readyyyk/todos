@@ -5,7 +5,7 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
-const RegModal = ({show, setShow, goLogin}) => {
+const RegModal = ({show, setShow, goLogin, setToast}) => {
 
     const usernameEl = useRef(),
         password1El = useRef(),
@@ -34,22 +34,21 @@ const RegModal = ({show, setShow, goLogin}) => {
             setPassword1Feedback('passwords should contain at least 4 symbols')
         } else if(p1 !== p2){
             setPassword2Feedback('passwords are different')
-        } else if( false /* api query checking if login is unique */ ){
-            setUsernameFeedback('user with this username already exists')
         } else {
             Api.registration({username, p1})
-            .then(
-                (res)=>{
-                    if(res.error){
-                        console.log(`sth went wrong ${res}`)
-                        // pop up sth went wrong...
-                    } else {
-                        console.log(`registered successfully u:${username} p:${p1}`)
-                        // pop up registered successfully
-                        setShow(false)
-                    }
+            .then( (res)=>{
+                if(res.error){
+                    setToast({show:true, data:{color:'danger', text:'sth went wrong...', textColor:'light'}})
+                } else {
+                    console.log(`registered successfully u:${username} p:${p1}`)
+                    setToast({show:true, data:{color:'success', text:'Successfully registered', textColor:'light'}})
+                    setShow(false)
                 }
-            )
+            })
+            .catch( (err)=>{
+                setToast({show:true, data:{color:'danger', text:'sth went wrong... (during registration)', textColor:'light'}})
+                throw err
+            } )
         }
 
     }
