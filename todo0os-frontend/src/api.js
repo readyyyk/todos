@@ -68,6 +68,13 @@
 const link = 'localhost'
 const port = 8000
 
+function getCookie(name) {
+    let matches = document.cookie.match(new RegExp(
+        "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+    ));
+    return matches ? decodeURIComponent(matches[1]) : undefined;
+}
+
 class Api {
     
     constructor() {
@@ -76,10 +83,12 @@ class Api {
     }
 
     get token() {
-        return document.cookie
-            .split(';')[0]
-            .split('Authorization=')[1]
-            .split(',')[0];
+        // const auth = document.cookie
+        //     .split(';')[0]
+        //     .split('Authorization=')[1]
+        // console.log(getCookie('Authorization'))
+        return getCookie('Authorization').split(',')[0]
+
     }
 
      get headers(){
@@ -102,8 +111,8 @@ class Api {
     }
 
     do_request(request, url){
-        console.log(request)
-        console.log(url)
+        // console.log(request)
+        // console.log(url)
         return fetch(url, request)
             .then(response => {
                 if (response.status !== 200) {
@@ -123,25 +132,29 @@ class Api {
     }
 
     registration( {username, password} ) {
-        const response = this.do_request(
+        return this.do_request(
             this.make_request_object({
                 body: arguments[0],
                 method:'POST'
             }),
             this.api_url+'/registration'
-        ).then((response) => response);
-        if(!response['error']){
-            let access_token = response.data['access_token']
-            document.cookie = `Authorization=${access_token}, path='/';`
-        }
-        return response;
+        ).then((response) => {
+            if(!response['error']){
+                response.data.then(data => {
+                    let access_token = data['access_token']
+                    document.cookie = `Authorization=${access_token}, path='/';` 
+                    console.log(access_token)
+                })    
+            }
+            return response;
+        })
     }
     login( {username, password} ){
         return this.do_request(
             this.make_request_object({
                 body: '',
                 method: 'GET'
-            }),//was post
+            }),
             this.api_url+`/login?username=${username}&password=${password}`
         ).then((response) => {
             if(!response['error']){
@@ -151,7 +164,7 @@ class Api {
                 })
             }
             return response;
-        }).finally()
+        })
     }
 
 

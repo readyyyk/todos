@@ -1,22 +1,40 @@
 import React, {useEffect, useState} from 'react'
 import './styles/reset.css'
+
 import NavbarComponent from "./components/navbarComponent";
 import TodosListComponent from "./components/todosListComponent";
 import NewGroupForm from "./components/newGroupForm"
+import LoginModal from "./components/loginModal"
+import RegModal from "./components/regModal"
 
-const server = {
-    ip: '127.0.0.1',
-    port: '5000'
-}
-const apiLink = `http://${server.ip}:${server.port}`
+import Api from './api'
 
 function App() {
 
     const [showTodosList, setShowTodosList] = useState(false)
 
-    // useEffect( () => {
-    //     // cookies
-    // }, [] )
+    const [loginModalShow, setLoginModalShow] = useState(false)
+    const [regModalShow, setRegModalShow] = useState(false)
+
+
+    useEffect(()=>{
+        if(document.cookie){
+            Api.get_groups()
+                .then( (res)=>{
+                    if(res['error']){
+
+                        // pop up error
+                    } else {
+                        res['data']
+                            .then( (res)=>{
+                                console.log(res)
+                            } )
+                    }
+                } )
+
+        }
+    }, [])
+
 
     return (
         <>
@@ -30,7 +48,10 @@ function App() {
 
             </main>
 
-            <NavbarComponent setShowTodosList={setShowTodosList}/>
+            <NavbarComponent setShowTodosList={setShowTodosList} showLoginModal={setLoginModalShow} showRegModal={setRegModalShow}/>
+
+            <LoginModal show={loginModalShow} setShow={setLoginModalShow} goReg={setRegModalShow} />
+            <RegModal show={regModalShow} setShow={setRegModalShow} goLogin={setLoginModalShow}/>
 
             <TodosListComponent show={showTodosList} setShow={setShowTodosList}/>
 

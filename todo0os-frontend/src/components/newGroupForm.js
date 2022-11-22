@@ -1,5 +1,6 @@
 import React, {useRef, useState} from 'react';
 import {Form, InputGroup, Button} from 'react-bootstrap';
+import Api from '../api'
 
 const NewGroupForm = () => {
 
@@ -7,8 +8,7 @@ const NewGroupForm = () => {
 
     const newGroup = (newGroupTitle) => {
         if(newGroupTitle.trim()){
-            // console.log(newGroupTitle)
-            // api query
+            console.log(Api.create_group({title:newGroupTitle, color_scheme:'0'}))
             title.current.value = ''
         }
     }

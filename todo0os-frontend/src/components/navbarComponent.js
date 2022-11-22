@@ -8,7 +8,7 @@ const SvgToggle = React.forwardRef( ({onClick}, ref)=>{
 	)
 })
 
-const NavbarComponent = ({setShowTodosList}) => {
+const NavbarComponent = ({setShowTodosList, showLoginModal, showRegModal}) => {
 	return (
 		<nav className="navbar fixed-bottom bg-primary py-2 px-3 text-light container-md" style={{borderRadius: '1.3em 1.3em 0 0'}}>
 			<div className="py-1 d-flex">
@@ -34,7 +34,7 @@ const NavbarComponent = ({setShowTodosList}) => {
 					</Dropdown.Toggle>
 
 					<Dropdown.Menu className='fs-6'>
-						<Dropdown.Item className="my-1 d-flex align-items-center hover-text-primary w-100">
+						<Dropdown.Item className="my-1 d-flex align-items-center hover-text-primary w-100" onClick={()=>showLoginModal(true)}>
 							<svg className="me-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="24" height="24"><path fillRule="evenodd" d="M2 2.75C2 1.784 2.784 1 3.75 1h2.5a.75.75 0 010 1.5h-2.5a.25.25 0 00-.25.25v10.5c0 .138.112.25.25.25h2.5a.75.75 0 010 1.5h-2.5A1.75 1.75 0 012 13.25V2.75zm6.56 4.5l1.97-1.97a.75.75 0 10-1.06-1.06L6.22 7.47a.75.75 0 000 1.06l3.25 3.25a.75.75 0 101.06-1.06L8.56 8.75h5.69a.75.75 0 000-1.5H8.56z"></path></svg>
 							<span> Sign in </span>
 						</Dropdown.Item>
@@ -42,7 +42,7 @@ const NavbarComponent = ({setShowTodosList}) => {
 							<svg className="me-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="24" height="24"> <path fillRule="evenodd" d="M2 2.75C2 1.784 2.784 1 3.75 1h2.5a.75.75 0 010 1.5h-2.5a.25.25 0 00-.25.25v10.5c0 .138.112.25.25.25h2.5a.75.75 0 010 1.5h-2.5A1.75 1.75 0 012 13.25V2.75zm10.44 4.5H6.75a.75.75 0 000 1.5h5.69l-1.97 1.97a.75.75 0 101.06 1.06l3.25-3.25a.75.75 0 000-1.06l-3.25-3.25a.75.75 0 10-1.06 1.06l1.97 1.97z"></path> </svg>
 							<span> Sign out </span>
 						</Dropdown.Item>
-						<Dropdown.Item className="my-1 d-flex align-items-center hover-text-primary w-100">
+						<Dropdown.Item className="my-1 d-flex align-items-center hover-text-primary w-100" onClick={()=>showRegModal(true)}>
 							<svg className="me-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="24" height="24"> <path fillRule="evenodd" d="M13.25 0a.75.75 0 01.75.75V2h1.25a.75.75 0 010 1.5H14v1.25a.75.75 0 01-1.5 0V3.5h-1.25a.75.75 0 010-1.5h1.25V.75a.75.75 0 01.75-.75zM5.5 4a2 2 0 100 4 2 2 0 000-4zm2.4 4.548a3.5 3.5 0 10-4.799 0 5.527 5.527 0 00-3.1 4.66.75.75 0 101.498.085A4.01 4.01 0 015.5 9.5a4.01 4.01 0 014.001 3.793.75.75 0 101.498-.086 5.527 5.527 0 00-3.1-4.659z"></path> </svg>
 							<span> Sign up </span>
 						</Dropdown.Item>
