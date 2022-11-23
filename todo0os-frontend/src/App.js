@@ -12,16 +12,18 @@ import SignoutModal from "./components/signoutModal";
 import TodosToast from "./components/todosToast";
 
 import Api from './api'
+import EditToolsComponent from "./components/editToolsComponent";
 
 function App() {
 
+        const [dataEdtTools, setDataEdtTools] = useState( {show:false, data: {id:undefined, title:'title', text:'lorem', startDate:{time:'00:00', date:'11/16/2006'}, endDate:{time:'12:00', date:'11/16/20022'}}} )
     const [showTodosList, setShowTodosList] = useState(false)
 
     const [loginModalShow, setLoginModalShow] = useState(false)
     const [signoutModalShow, setSignoutModalShow] = useState(false)
     const [regModalShow, setRegModalShow] = useState(false)
 
-    const [toastData, setToastData] = useState({show:true, data:{color:'success', text:'template text', textColor:'light'}})
+    const [toastData, setToastData] = useState({show:false, data:{color:'success', text:'template text', textColor:'light'}})
 
 
 
@@ -52,7 +54,7 @@ function App() {
 
                 {/*  todo: map on groups array  */}
 
-                {/* todo:<EditToolsComponent />*/}
+                <EditToolsComponent show={dataEdtTools.show} data={dataEdtTools.data} setData={setDataEdtTools} setToast={setToastData}/>
 
             </main>
 

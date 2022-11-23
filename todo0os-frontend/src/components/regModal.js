@@ -38,7 +38,7 @@ const RegModal = ({show, setShow, goLogin, setToast}) => {
             Api.registration({username, p1})
             .then( (res)=>{
                 if(res.error){
-                    setToast({show:true, data:{color:'danger', text:'sth went wrong...', textColor:'light'}})
+                    setToast({show:true, data:{color:'danger', text:'sth went wrong... ', textColor:'light'}})
                 } else {
                     console.log(`registered successfully u:${username} p:${p1}`)
                     setToast({show:true, data:{color:'success', text:'Successfully registered', textColor:'light'}})
