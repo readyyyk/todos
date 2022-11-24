@@ -16,7 +16,7 @@ import EditToolsComponent from "./components/editToolsComponent";
 
 function App() {
 
-        const [dataEdtTools, setDataEdtTools] = useState( {show:false, data: {id:undefined, title:'title', text:'lorem', startDate:{time:'00:00', date:'11/16/2006'}, endDate:{time:'12:00', date:'11/16/20022'}}} )
+    const [dataEdtTools, setDataEdtTools] = useState( {show:false, data: {id:undefined, title:'title', text:'lorem', startDate:{time:'00:00', date:'11/16/2006'}, endDate:{time:'12:00', date:'11/16/20022'}}} )
     const [showTodosList, setShowTodosList] = useState(false)
 
     const [loginModalShow, setLoginModalShow] = useState(false)
