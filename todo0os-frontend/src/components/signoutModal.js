@@ -12,7 +12,7 @@ const SignoutModal = ({show, setShow, setToast}) => {
     }
 
     return (
-        <Modal show={show} onHide={()=>setShow(false)}>
+        <Modal show={show} centered onHide={()=>setShow(false)}>
             <Modal.Header closeButton>
                 <Modal.Title> Sign out </Modal.Title>
             </Modal.Header>

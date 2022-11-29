@@ -54,7 +54,7 @@ const RegModal = ({show, setShow, goLogin, setToast}) => {
     }
 
     return (
-        <Modal show={show} onHide={()=>setShow(false)}>
+        <Modal show={show} centered onHide={()=>setShow(false)}>
             <Modal.Header closeButton>
                 <Modal.Title> Registration </Modal.Title>
             </Modal.Header>
@@ -79,7 +79,7 @@ const RegModal = ({show, setShow, goLogin, setToast}) => {
                 </Form>
 
                 <div className='w-100 d-flex justify-content-between align-items-end'>
-                    <div>
+                    <div className='w-100'>
                         <Button variant="success" onClick={()=>handleSubmit()} className='me-2'>
                             Submit
                         </Button>
