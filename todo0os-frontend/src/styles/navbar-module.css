@@ -1,9 +1,3 @@
-@media (max-width: 460px) {
-    .input-group > .search-input{
-        width: 6em;
-    }
-}
-
 .hover-text-primary{
     transition: all .3s ease;
 }
@@ -16,10 +10,10 @@
     cursor: pointer;
 }
 
-.dropdown-item:hover{
+nav .dropdown-item:hover{
     background: inherit;
 }
-.dropdown-menu.show{
+nav .dropdown-menu.show{
     bottom: 35% !important;
     display: flex;
     flex-direction: column-reverse;

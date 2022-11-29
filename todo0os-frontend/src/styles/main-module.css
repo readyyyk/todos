@@ -1,3 +1,18 @@
+.btn::after{
+    margin: 0;
+}
+.btn-group > .btn{
+    padding: 0.2em;
+    height: 1.2em;
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    color: #333;
+    font-size: 1.1em;
+}
+
+
 .card{
     box-shadow: rgba(0, 0, 0, 0.17) 0px 1.5em 2em -.5em;
 }
@@ -8,16 +23,51 @@
     cursor: pointer;
 }
 
-fieldset{ border: 1.7px solid rgba(110, 110, 110, 0.7); border-radius: 5px; padding: 1em; }
-legend { float: none; width: fit-content; padding: .2em; margin-left: .7em; margin-right: .7em;}
-legend > h5{
+@media (max-width: 460px) {
+    .input-group > .search-input{
+        width: 6em;
+    }
+}
+
+
+.hover-text-primary{
+    transition: color .3s ease;
+}
+.hover-text-primary:hover{
+    color:#0D6EFD;
+}
+
+.cursor-pointer{
+    cursor: pointer;
+}
+
+fieldset{ border: 1.7px solid rgba(110, 110, 110, 0.7); border-radius: 5px; padding: 1em; transition: .4s all ease }
+legend.row { float: none; width: fit-content; max-width: 90%; padding: .2em; margin-left: .7em; margin-right: .7em;}
+@media(max-width: 992px){
+    legend.row {
+        min-width: 73%;
+    }
+}
+legend > h5, .card h5{
+    height: fit-content;
+    vertical-align:middle;
     overflow: hidden;
     text-overflow: ellipsis;
-    display: -webkit-box;
+    display: -webkit-inline-box;
     -webkit-box-orient: vertical;
     line-height: normal;
     -webkit-line-clamp: 2;
 }
+legend > div{
+    min-width: 2.1rem;
+}
+@media (min-width:993px){
+    legend > div{
+        min-width: fit-content;
+    }
+}
+
+
 
 main > fieldset > .card-wrapper{
     flex-grow: 1;
@@ -39,9 +89,39 @@ main.vertical > fieldset{
     width: min-content;
     height: min-content;
 }
+.group-tools-container{--bs-gutter-x: 0rem;--bs-gutter-y: .3em;}
+.group-tools{
+    height: fit-content;
+    width: fit-content;
+    margin: .2rem;
+}
+.group-tools svg{
+    height: fit-content;
+}
+.group-title{
+    max-width: 80%;
+    font-size: 1.5rem;
+}
+.col-lg-auto{
+    max-width: 75%;
+}
+
+@media (max-width:992px) {
+    .group-tools{
+        transform: scale(.9);
+        margin: .2rem;
+    }
+    .row > .p-1{
+        padding: .1rem !important;
+    }
+
+}
 
 @media (max-width:724px) {
     main > fieldset{
         width: min-content;
+    }
+    .group-title{
+        max-width: 70%;
     }
 }
