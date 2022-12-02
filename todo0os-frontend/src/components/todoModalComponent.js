@@ -1,17 +1,45 @@
-import React from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import '../styles/edit-tools.css'
 import Api from '../api'
 
-const EditToolsComponent = ({show, data, setData, setToast}) => {
+const EditToolsComponent = ({show, data, setData, setToast, updateTodo, deleteTodo}) => {
+    const titleInput = useRef(),
+        textInput = useRef(),
+        start_dateInput = useRef(),
+        start_timeInput = useRef(),
+        deadline_dateInput = useRef(),
+        deadline_timeInput = useRef()
+    useEffect( ()=>{
+        titleInput.current.value = data.title
+        textInput.current.value = data.text
+        start_dateInput.current.value = data.start_date
+        start_timeInput.current.value = data.start_time
+        deadline_dateInput.current.value = data.deadline_date
+        deadline_timeInput.current.value = data.deadline_time
+    }, [data] )
 
-    const handleSubmit = () => {
+    const handleSubmit = (e) => {
         // Api.editTodo()
+        e.preventDefault()
+        updateTodo(
+            {
+                id: data.id,
+                groupId: data.groupId,
+                title: titleInput.current.value,
+                text: textInput.current.value,
+                start_date: start_dateInput.current.value,
+                start_time: start_timeInput.current.value,
+                deadline_date: deadline_dateInput.current.value,
+                deadline_time: deadline_timeInput.current.value,
+                status: data.status
+            }
+        )
+        setData({show: false, data: data})
         setToast({show:true, data:{color:'warning', text:'edit tool is in dev (@halone228)', textColor:'dark'}})
     }
 
     const handleDelete = () => {
-        console.log(data.id)
-        Api.delete_todo(data.id)
+        /*Api.delete_todo(data.id)
             .then(res =>{
                 if(!res.error){
                     setToast({show:true, data:{color:'success', text:'Successfully deleted', textColor:'light'}})
@@ -22,7 +50,9 @@ const EditToolsComponent = ({show, data, setData, setToast}) => {
             .catch( err=>{
                 setToast({show:true, data:{color:'danger', text:'sth went wrong... (during deletion item)', textColor:'light'}})
                 throw err
-            } )
+            } )*/
+        deleteTodo(data.id)
+        setData({show:false, data: data})
     }
 
     const handleCancel = () => {
@@ -31,25 +61,27 @@ const EditToolsComponent = ({show, data, setData, setToast}) => {
 
     return (
         <div className={`tools-wrapper ${show?'show':'passive'} `} id="tools-wrapper">
-            <div className={`tools ${show?'show':'passive'}`} id="tools">
+            <form className={`tools ${show?'show':'passive'}`} id="tools" onSubmit={handleSubmit}>
                 <div className="card px-0 overflow-auto pLib-sb-Minimal mb-2"
                      style={{width: '30em', maxWidth: '90vw', maxHeight: '60vh', height: 'fit-content'}}>
                     <div className="card-header py-3 d-flex justify-content-between align-items-center">
                         <input type="text" className="form-control mb-0" name="card-title" placeholder="Title"
-                               defaultValue={data.title} />
+                              ref={titleInput}
+                        />
                     </div>
                     <div className="card-body">
                         <textarea className="form-control lh-sm"
                                   style={{letterSpacing: '.5px', maxHeight: '33vh', minHeight: '20vh'}} minLength = "1"
-                                  maxLength="10000" defaultValue={data.text} />
+                                  maxLength="10000"
+                                  ref={textInput}/>
                     </div>
                     <div className="card-footer fs-6 lh-1 text-secondary">
                         <div className="row">
                             <div className="col-5">
-                                <input type="date" className="dt-input mb-2" title="Start date"
-                                       defaultValue={data.startDate.date} />
-                                <input type="time" className="dt-input" title="Start time"
-                                       defaultValue={data.startDate.time} />
+                                <input type="date" disabled className="dt-input mb-2" title="Start date"
+                                       ref={start_dateInput} />
+                                <input type="time" disabled className="dt-input" title="Start time"
+                                       ref={start_timeInput}/>
                             </div>
 
                             {/*<div class="col-2 p-0 d-flex justify-content-center align-items-center">*/}
@@ -60,16 +92,18 @@ const EditToolsComponent = ({show, data, setData, setToast}) => {
 
                             <div className="col-5 d-flex justify-content-end flex-wrap">
                                 <input type="date" className="text-end dt-input mb-2" title="Deadline date" min="2022-10-31"
-                                       defaultValue={data.endDate.time} />
+                                        min = {new Date().toISOString().slice(0, -14)}
+                                        ref={deadline_dateInput}/>
                                 <input type="time" className="text-end dt-input" title="Deadline time"
-                                       defaultValue={data.endDate.time} />
+                                       // min={(deadline_dateInput.current.value === new Date().toISOString().slice(0, -14))?new Date().toISOString().slice(0, -8).slice(11, 17):'00:00'}
+                                       ref={deadline_timeInput}/>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div className="tools-bar row mt-3 d-flex justify-content-center">
                     <div className="col-2 text-center p-2 rounded-3 tools-bar__tools submit"
-                         onClick={()=>handleSubmit()}>
+                         onClick={(e)=>handleSubmit(e)}>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="2.4em" height="2.4em"> <path d="M17.28 9.28a.75.75 0 00-1.06-1.06l-5.97 5.97-2.47-2.47a.75.75 0 00-1.06 1.06l3 3a.75.75 0 001.06 0l6.5-6.5z" /> <path fillRule="evenodd" d="M12 1C5.925 1 1 5.925 1 12s4.925 11 11 11 11-4.925 11-11S18.075 1 12 1zM2.5 12a9.5 9.5 0 1119 0 9.5 9.5 0 01-19 0z" /></svg>
                     </div>
                     <div className="col-2 text-center p-2 rounded-3 mx-3 tools-bar__tools delete"
@@ -93,7 +127,7 @@ const EditToolsComponent = ({show, data, setData, setToast}) => {
                         </svg>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     );
 };

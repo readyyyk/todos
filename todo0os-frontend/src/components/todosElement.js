@@ -2,7 +2,25 @@ import React from 'react';
 
 import Dropdown from "react-bootstrap/Dropdown";
 
-const TodosElement = ({data, update, openEdit}) => {
+const TodosElement = ({data, updateTodo, openEdit}) => {
+    const update = (field, newValue ) => {
+        /*Api.updateTodo(data, field, newValue)
+            .then( res => {
+                if(res.error){
+                    setToast({show:true, data:{color:'danger', text:'sth went wrong... (during color updadte)', textColor:'light'}})
+                    throw res.error
+                } else {
+
+                }
+            } )
+            .catch( err => {
+                setToast({show:true, data:{color:'danger', text:'sth went wrong... (during color updadte)', textColor:'light'}})
+                throw err
+            } )*/
+        let tempTodoData = data
+        tempTodoData[field] = newValue
+        updateTodo(tempTodoData)
+    }
 
     const variantsState = {
         'passive': "secondary",
@@ -18,7 +36,7 @@ const TodosElement = ({data, update, openEdit}) => {
         dropDownCnt++
         dropDownData.push(
             <Dropdown.Item
-                onClick={()=>update(data, status)}
+                onClick={()=>update('status', `${status}`)}
                 className={`text-${variantsState[status]}`}
                 key={`status${data.id}${dropDownCnt}`}
             > {status} </Dropdown.Item>
@@ -56,7 +74,7 @@ const TodosElement = ({data, update, openEdit}) => {
                         </div>
                         <div className="col-2 p-0">
                             <div className="d-flex justify-content-center align-items-center border border-secondary rounded-3 border-opacity-50 bg-light p-1 card-edit"
-                                onClick={()=>openEdit(data.id)}
+                                onClick={()=>openEdit({show:true, data:data})}
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
                                     <path fillRule="evenodd"

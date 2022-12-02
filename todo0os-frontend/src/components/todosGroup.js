@@ -11,7 +11,7 @@ import Api from '../api'
 
 const color_schemes = [
     ['#e9a49e', '#c96359'],
-    ['#e6c9a8', '#f0a958'],
+    ['#ffdaaf', '#f0a958'],
     ['#ccff90', '#7eb63d'],
     ['#cbf0f8', '#569dad'],
     ['#d7aefb', '#a068d1'],
@@ -21,28 +21,34 @@ const color_schemes = [
 
 const RenameGroupModal = ({title, show, update, close}) => {
     const newTitle = useRef()
-    const submit = () => {
+    const submit = (e) => {
+        e.preventDefault()
         // Api.updateGroup(data, field, newData)
-        update('title', newTitle.current.value)
-        close()
+        if(newTitle.current.value.trim()) {
+            update('title', newTitle.current.value)
+            close()
+        }
     }
     return (
-        <Modal centered show={show} onHide={()=>close}>
+        <Modal centered show={show} onHide={close}>
             <Modal.Header closeButton>
                 <Modal.Title>
                     Rename group
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Form className='w-100 mb-3'> <Form.Control type="text" placeholder='new title' defaultValue={title} ref={newTitle}/> </Form>
-                <Button variant="success" className='me-2' onClick={()=>submit()}> Submit </Button>
-                <Button variant="secondary" onClick={()=>close}> Close </Button>
+                <Form onSubmit={submit}>
+                    <Form.Control type="text" required placeholder='new title' defaultValue={title} ref={newTitle} className='w-100 mb-3'/>
+                    <Button variant="success" type='submit' className='me-2' > Submit </Button>
+                    <Button variant="secondary" onClick={close}> Close </Button>
+                </Form>
             </Modal.Body>
         </Modal>
     )
 }
 const DeleteGroupModal = ({show, deleteThis, close}) => {
-    const submit = () => {
+    const submit = (e) => {
+        e.preventDefault()
         // Api.deleteGroup(data, field, newData)
         deleteThis()
         close()
@@ -56,8 +62,10 @@ const DeleteGroupModal = ({show, deleteThis, close}) => {
             <Modal.Body>
                 <span className='fs-4'> Are you sure? </span>
                 <div className='mt-3'>
-                    <Button variant="danger" onClick={()=>submit()} className='me-2'> Submit </Button>
-                    <Button variant="secondary" onClick={close}> Cancel </Button>
+                    <form onSubmit={submit}>
+                        <Button variant="danger" type='submit' className='me-2' autoFocus> Submit </Button>
+                        <Button variant="secondary" onClick={close}> Cancel </Button>
+                    </form>
                 </div>
             </Modal.Body>
         </Modal>
@@ -65,10 +73,10 @@ const DeleteGroupModal = ({show, deleteThis, close}) => {
 }
 
 
-const TodosGroup = ({data, innerData, updateGroup, updateTodo, deleteGroup, setToast}) => {
+const TodosGroup = ({data, innerData, updateGroup, updateTodo, deleteGroup, setToast, openEdit}) => {
     const [renameGroupModalShow, setRenameGroupModalShow] = React.useState({show: false, title: data.title})
     const [deleteGroupModalShow, setDeleteGroupModalShow] = React.useState(false)
-    const update = ( field, newValue ) => {
+    const update = (field, newValue ) => {
         /*Api.updateGroup(data, field, newValue)
             .then( res => {
                 if(res.error){
@@ -102,14 +110,14 @@ const TodosGroup = ({data, innerData, updateGroup, updateTodo, deleteGroup, setT
 
 
     return (
-        <fieldset className="bg-opacity-10 m-2 m-sm-3 mt-3 pb-0"
+        <fieldset className="bg-opacity-10 m-2 m-sm-3 mt-3 px-2 px-sm-3 pb-0"
                   style={{backgroundColor: `${color_schemes[data.color_scheme][0]}`}} >
-            <legend className="rounded-3 p-1 p-lg-2 row mw-100 align-items-center"
+            <legend className="rounded-3 p-1 p-lg-2 row mw-100 align-items-center justify-content-around"
                     style={{backgroundColor: `${color_schemes[data.color_scheme][1]}`}} >
                 <h5 className="my-0 px-1 pe-lg-3 overflow-hidden group-title col-8 col-lg-auto text-center">
                     {data.title}
                 </h5>
-                <div className="col-4 col-lg-3 row mt-0 justify-content-end group-tools-container">
+                <div className="col-4 col-lg-3 row mt-0 justify-content-end group-tools-container" style={{minWidth: !innerData.length&&'3.9em'}}>
 
                     <OverlayTrigger trigger="click" placement="bottom" overlay={popper}>
                         <button className="btn btn-light p-1 lh-sm  col-6 col-lg-3 group-tools">
@@ -133,7 +141,7 @@ const TodosGroup = ({data, innerData, updateGroup, updateTodo, deleteGroup, setT
                                 d="M9.206 7.501a.75.75 0 01.793.705l.5 8.5A.75.75 0 119 16.794l-.5-8.5a.75.75 0 01.705-.793zm6.293.793A.75.75 0 1014 8.206l-.5 8.5a.75.75 0 001.498.088l.5-8.5z"></path>
                         </svg>
                     </button>
-                    <button className="btn btn-light p-1 lh-sm  col-6 col-lg-3 group-tools">
+                    <button className="btn btn-light p-1 lh-sm  col-6 col-lg-3 group-tools" >
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="24" height="24">
                             <path fillRule="evenodd"
                                   d="M7.75 2a.75.75 0 01.75.75V7h4.25a.75.75 0 110 1.5H8.5v4.25a.75.75 0 11-1.5 0V8.5H2.75a.75.75 0 010-1.5H7V2.75A.75.75 0 017.75 2z"></path>
@@ -144,7 +152,7 @@ const TodosGroup = ({data, innerData, updateGroup, updateTodo, deleteGroup, setT
 
             {
                 innerData.map( (el)=>
-                    <TodosElement data={el} key={`todo-${el.id}`} update={updateTodo}/>
+                    <TodosElement data={el} key={`todo-${el.id}`} updateTodo={updateTodo} openEdit={openEdit}/>
                 )
             }
 

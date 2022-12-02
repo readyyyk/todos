@@ -10,7 +10,7 @@ import TodosGroup from "./components/todosGroup";
 
 // forms
 import NewGroupForm from "./components/newGroupForm";
-import EditToolsComponent from "./components/editToolsComponent";
+import TodoModalComponent from "./components/todoModalComponent";
 
 // modals
 import LoginModal from "./components/loginModal"
@@ -58,27 +58,41 @@ function App() {
             } )
         )
     }
+    const newGroup = (data) => {
+        setGroups( [...groups, data] )
+    }
 
     const [todos, setTodos] = useState([
         {
             id: 0,
             groupId: 0,
-            title: 'template todo title',
+            title: 'template title',
             text: 'lorem lorem lorem v lorem lorem lorem lorem lorem lorem lorem',
-            start_date: '16-11-2006',
+            start_date: '2006-11-16',
             start_time: '00:00',
-            deadline_date: '16-11-2022',
+            deadline_date: '2022-11-16',
             deadline_time: '23:59',
             status: 'IMPORTANT'
         },
         {
             id: 1,
+            groupId: 0,
+            title: '2',
+            text: '123',
+            start_date: '2506-11-16',
+            start_time: '00:00',
+            deadline_date: '2022-11-16',
+            deadline_time: '23:59',
+            status: 'IMPORTANT'
+        },
+        {
+            id: 2,
             groupId: 1,
             title: '2 todo title',
             text: 'lorem ',
-            start_date: '26-12-2007',
+            start_date: '2007-12-26',
             start_time: '13:30',
-            deadline_date: '16-11-3022',
+            deadline_date: '3022-11-16',
             deadline_time: '13:55',
             status: 'in progress'
         },
@@ -93,8 +107,24 @@ function App() {
             } )
         )
     }
+    const deleteTodo = (id) => {
+        setTodos( todos.filter( (el)=> el.id!==id ) )
+    }
 
-    const [dataEdtTools, setDataEdtTools] = useState( {show:false, data: {id:undefined, title:'title', text:'lorem', startDate:{time:'00:00', date:'11/16/2006'}, endDate:{time:'12:00', date:'11/16/20022'}}} )
+    const [dataEditTools, setDataEditTools] = useState(
+        {show:false,
+            data: {
+                id: 0,
+                groupId: 0,
+                title: 'template todo title',
+                text: 'lorem lorem lorem v lorem lorem lorem lorem lorem lorem lorem',
+                start_date: '11-16-2006',
+                start_time: '00:00',
+                deadline_date: '11-16-2022',
+                deadline_time: '23:59',
+                status: 'IMPORTANT'
+            }
+        } )
     const [showTodosList, setShowTodosList] = useState(false)
 
     const [loginModalShow, setLoginModalShow] = useState(false)
@@ -127,7 +157,7 @@ function App() {
     return (
         <>
 
-            <NewGroupForm />
+            <NewGroupForm lastId={groups.at(-1).id} newGroup={newGroup}/>
 
             <main className="container-fluid d-flex flex-wrap pt-2 px-2 px-sm-4 pb-4 justify-content-center   horizontal">
 
@@ -143,12 +173,14 @@ function App() {
                             deleteGroup={deleteGroup}
 
                             setToast={setToastData}
+
+                            openEdit={setDataEditTools}
                             key={`group-${el.id}`}
                         />
                     )
                 }
 
-                <EditToolsComponent show={dataEdtTools.show} data={dataEdtTools.data} setData={setDataEdtTools} setToast={setToastData}/>
+                <TodoModalComponent show={dataEditTools.show} data={dataEditTools.data} setData={setDataEditTools} setToast={setToastData} deleteTodo={deleteTodo} updateTodo={updateTodo}/>
 
             </main>
 
