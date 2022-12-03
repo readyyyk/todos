@@ -110,9 +110,18 @@ function App() {
     const deleteTodo = (id) => {
         setTodos( todos.filter( (el)=> el.id!==id ) )
     }
+    const addTodo = (data) => {
+        setTodos( [...todos,
+            {
+                id: todos.at(-1).id+1,
+                ...data
+            }
+        ] )
+    }
 
     const [dataEditTools, setDataEditTools] = useState(
         {show:false,
+            action:'upd',
             data: {
                 id: 0,
                 groupId: 0,
@@ -131,7 +140,7 @@ function App() {
     const [signoutModalShow, setSignoutModalShow] = useState(false)
     const [regModalShow, setRegModalShow] = useState(false)
 
-    const [toastData, setToastData] = useState({show:false, data:{color:'success', text:'template text', textColor:'light'}})
+    const [toastData, setToastData] = useState({show:false, action:'upd', data:{color:'success', text:'template text', textColor:'light'}})
 
 
 
@@ -180,7 +189,13 @@ function App() {
                     )
                 }
 
-                <TodoModalComponent show={dataEditTools.show} data={dataEditTools.data} setData={setDataEditTools} setToast={setToastData} deleteTodo={deleteTodo} updateTodo={updateTodo}/>
+                <TodoModalComponent
+                    show={dataEditTools.show}
+                    action={dataEditTools.action}
+                    data={dataEditTools.data} setData={setDataEditTools}
+                    setToast={setToastData}
+                    deleteTodo={deleteTodo} updateTodo={updateTodo} addTodo={addTodo}
+                />
 
             </main>
 
@@ -190,7 +205,12 @@ function App() {
             <RegModal show={regModalShow} setShow={setRegModalShow} goLogin={setLoginModalShow} setToast={setToastData}/>
             <SignoutModal show={signoutModalShow} setShow={setSignoutModalShow} setToast={setToastData}/>
 
-            <TodosListComponent show={showTodosList} setShow={setShowTodosList}/>
+            <TodosListComponent
+                show={showTodosList} setShow={setShowTodosList}
+                openEdit={setDataEditTools}
+                groups={groups} todos={todos}
+                username ={data.userName}
+            />
 
             <TodosToast show={toastData.show} setShow={setToastData} data={toastData.data}/>
         </>
