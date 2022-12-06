@@ -24,6 +24,7 @@ import Api from './api'
 function App() {
 
     const [data, setData] = useState({userId:0, userName:'admin'} )
+
     const [groups, setGroups] = useState([
         {
             id: 0,
@@ -140,16 +141,16 @@ function App() {
     const [signoutModalShow, setSignoutModalShow] = useState(false)
     const [regModalShow, setRegModalShow] = useState(false)
 
-    const [toastData, setToastData] = useState({show:false, action:'upd', data:{color:'success', text:'template text', textColor:'light'}})
+    const [toastData, setToastData] = useState({show:false, data:{color:'success', text:'template text', textColor:'light'}})
 
 
 
-    useEffect(()=>{
+    /*useEffect(()=>{
         if(document.cookie){
-            Api.get_groups()
+            Api.get_data()
                 .then( (res)=>{
                     if(res['error']){
-
+                            setToastData({show:true, data:{color:'danger', text:'error fetching data', textColor:'light'}})
                         // pop up error
                     } else {
                         res['data']
@@ -158,9 +159,12 @@ function App() {
                             } )
                     }
                 } )
-
+                .catch( err => {
+                    setToastData({show:true, data:{color:'danger', text:'error fetching data', textColor:'light'}})
+                    throw err
+                } )
         }
-    }, [])
+    }, [])*/
 
 
     return (
@@ -199,7 +203,11 @@ function App() {
 
             </main>
 
-            <NavbarComponent setShowTodosList={setShowTodosList} showLoginModal={setLoginModalShow} showRegModal={setRegModalShow} showLogoutModal={setSignoutModalShow}/>
+            <NavbarComponent
+                setShowTodosList={setShowTodosList}
+                showLoginModal={setLoginModalShow} showRegModal={setRegModalShow} showLogoutModal={setSignoutModalShow}
+                username={data.userName}
+            />
 
             <LoginModal show={loginModalShow} setShow={setLoginModalShow} goReg={setRegModalShow} setToast={setToastData}/>
             <RegModal show={regModalShow} setShow={setRegModalShow} goLogin={setLoginModalShow} setToast={setToastData}/>

@@ -1,74 +1,8 @@
-/*
-    from peewee import (
-        SqliteDatabase,
-        AutoField,
-        Model,
-        TextField,
-        ForeignKeyField,
-        DateField,
-        BooleanField
-    )
-
-    db = SqliteDatabase('main.db')
-
-
-    class BaseModel(Model):
-        class Meta:
-            database = db
-
-
-    class User(BaseModel):
-        id = AutoField(primary_key=True)
-        username = TextField(unique=True)
-        password = TextField()
-        email = TextField(unique=True)
-
-
-    class Group(BaseModel):
-        id = AutoField(primary_key=True)
-        group_title = TextField()
-        background_color = TextField()
-        title_color = TextField()
-        user = ForeignKeyField(User, field='id', on_delete="CASCADE")
-        text_shadow = BooleanField(default=False)
-
-
-    class Todos(BaseModel):
-        id = AutoField(primary_key=True)
-        group = ForeignKeyField(Group, field='id', on_delete='CASCADE')
-        title = TextField()
-        text = TextField()
-        deadline_date = DateField()
-        start_date = DateField()
-        status = TextField()
-
-
-    def init():
-        User.create_table()
-        Group.create_table()
-        Todos.create_table()
-
-
-    class Statuses(str, Enum):
-        passive = "passive"
-        important = "important"
-        in_progress = "in_progress"
-        done = "done"
-        deadline_close = "deadline_close"
-        too_late = "too_late"
-*/
-
-
-// Api.set_headers(headersData)
-// Api.{query}( {data}, {headers} )
-//            ^
-// Deprecated |
-
 
 const link = 'localhost'
 const port = 8000
 
-function getCookie(name) {
+const getCookie = (name) => {
     let matches = document.cookie.match(new RegExp(
         "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
     ));

@@ -25,7 +25,7 @@ const NewGroupForm = ({lastId, newGroup}) => {
                             placeholder="New group title"
                             ref={title}
                         />
-                        <Button variant="outline-success" type='submit'>
+                        <Button variant="success" type='submit'>
                             Submit
                         </Button>
                     </InputGroup>

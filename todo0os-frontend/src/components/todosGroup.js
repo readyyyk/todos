@@ -10,12 +10,12 @@ import TodosElement from './todosElement'
 import Api from '../api'
 
 const color_schemes = [
-    ['#e9a49e', '#c96359'],
-    ['#ffdaaf', '#f0a958'],
-    ['#ccff90', '#7eb63d'],
-    ['#cbf0f8', '#569dad'],
-    ['#d7aefb', '#a068d1'],
-    ['#c9c9c9', '#838383'],
+    ['#c9635980', '#c96359F2'],
+    ['#ffdaaf80', '#f0a958F2'],
+    ['#ccff9080', '#7eb63dF2'],
+    ['#cbf0f880', '#569dadF2'],
+    ['#d7aefb80', '#a068d1F2'],
+    ['#c9c9c980', '#838383F2'],
 ]
 
 
