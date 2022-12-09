@@ -19,14 +19,14 @@ const color_schemes = [
 ]
 
 
-const RenameGroupModal = ({title, show, update, close}) => {
+const RenameGroupModal = ({title, show, update, close, elId}) => {
     const newTitle = useRef()
     const submit = (e) => {
         e.preventDefault()
-        // Api.updateGroup(data, field, newData)
         if(newTitle.current.value.trim()) {
-            update('title', newTitle.current.value)
-            close()
+            if ( update('title', newTitle.current.value) ) {
+                close()
+            }
         }
     }
     return (
@@ -38,7 +38,7 @@ const RenameGroupModal = ({title, show, update, close}) => {
             </Modal.Header>
             <Modal.Body>
                 <Form onSubmit={submit}>
-                    <Form.Control type="text" required placeholder='new title' defaultValue={title} ref={newTitle} className='w-100 mb-3'/>
+                    <Form.Control type="text" required autoFocus placeholder='new title' defaultValue={title} ref={newTitle} className='w-100 mb-3'/>
                     <Button variant="success" type='submit' className='me-2' > Submit </Button>
                     <Button variant="secondary" onClick={close}> Close </Button>
                 </Form>
@@ -46,12 +46,19 @@ const RenameGroupModal = ({title, show, update, close}) => {
         </Modal>
     )
 }
-const DeleteGroupModal = ({show, deleteThis, close}) => {
+const DeleteGroupModal = ({show, close, deleteGroup, groupId, setToast}) => {
     const submit = (e) => {
         e.preventDefault()
-        // Api.deleteGroup(data, field, newData)
-        deleteThis()
-        close()
+        Api.delete_group(groupId)
+            .then( res => {
+                setToast({show:true, data:{color:'success', text:'Successfully deleted group', textColor:'light'}})
+                deleteGroup(groupId)
+                close()
+            } )
+            .catch( err => {
+                setToast({show:true, data:{color:'danger', text:'sth went wrong... (during deletion group)', textColor:'light'}})
+                throw err
+            } )
     }
 
     return (
@@ -77,22 +84,22 @@ const TodosGroup = ({data, innerData, updateGroup, updateTodo, deleteGroup, setT
     const [renameGroupModalShow, setRenameGroupModalShow] = React.useState({show: false, title: data.title})
     const [deleteGroupModalShow, setDeleteGroupModalShow] = React.useState(false)
     const update = (field, newValue ) => {
-        /*Api.updateGroup(data, field, newValue)
+        const updGroup = data
+        updGroup[field] = newValue
+        return Api.update_group(updGroup)
             .then( res => {
                 if(res.error){
                     setToast({show:true, data:{color:'danger', text:'sth went wrong... (during color updadte)', textColor:'light'}})
                     throw res.error
                 } else {
-
+                    updateGroup(updGroup)
+                    return true
                 }
             } )
             .catch( err => {
                 setToast({show:true, data:{color:'danger', text:'sth went wrong... (during color updadte)', textColor:'light'}})
                 throw err
-            } )*/
-        let tempGroupData = data
-        tempGroupData[field] = newValue
-        updateGroup(tempGroupData)
+        } )
     }
 
     const popper = (
@@ -141,7 +148,7 @@ const TodosGroup = ({data, innerData, updateGroup, updateTodo, deleteGroup, setT
                                 d="M9.206 7.501a.75.75 0 01.793.705l.5 8.5A.75.75 0 119 16.794l-.5-8.5a.75.75 0 01.705-.793zm6.293.793A.75.75 0 1014 8.206l-.5 8.5a.75.75 0 001.498.088l.5-8.5z"></path>
                         </svg>
                     </button>
-                    <button className="btn btn-light p-1 lh-sm  col-6 col-lg-3 group-tools" onClick={()=>openEdit({show:true, action:'new', data: {groupId:data.id}})} >
+                    <button className="btn btn-light p-1 lh-sm  col-6 col-lg-3 group-tools" onClick={()=>openEdit({show:true, action:'new', data: {group:data.id}})} >
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="24" height="24">
                             <path fillRule="evenodd"
                                   d="M7.75 2a.75.75 0 01.75.75V7h4.25a.75.75 0 110 1.5H8.5v4.25a.75.75 0 11-1.5 0V8.5H2.75a.75.75 0 010-1.5H7V2.75A.75.75 0 017.75 2z"></path>
@@ -152,12 +159,23 @@ const TodosGroup = ({data, innerData, updateGroup, updateTodo, deleteGroup, setT
 
             {
                 innerData.map( (el)=>
-                    <TodosElement data={el} key={`todo-${el.id}`} updateTodo={updateTodo} openEdit={openEdit}/>
+                    <TodosElement data={el} key={`todo-${el.id}`} updateTodo={updateTodo} openEdit={openEdit} setToast={setToast}/>
                 )
             }
 
-            <DeleteGroupModal show={deleteGroupModalShow} deleteThis={()=>deleteGroup(data.id)} close={()=>setDeleteGroupModalShow(false)}/>
-            <RenameGroupModal title={renameGroupModalShow.title} show={renameGroupModalShow.show} update={update} close={()=>setRenameGroupModalShow({show:false})}/>
+            <DeleteGroupModal
+                show={deleteGroupModalShow} close={()=>setDeleteGroupModalShow(false)}
+                deleteGroup={deleteGroup}
+                groupId={data.id}
+                setToast={setToast}
+            />
+            <RenameGroupModal
+                title={renameGroupModalShow.title}
+                show={renameGroupModalShow.show}
+                update={update} elId={data.id}
+                close={()=>setRenameGroupModalShow({show:false})}
+                setToast={setToast}
+            />
         </fieldset>
     );
 };

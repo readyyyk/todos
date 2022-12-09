@@ -36,7 +36,7 @@ const TodosListComponent = ({show, setShow, openEdit, groups, todos, username}) 
                                     <summary> {group.title} </summary>
                                     <ul className="list-group mt-3 mb-2">
                                         {
-                                            todos.filter( (todo) => todo.groupId===group.id ).map( (todo, todoI) =>
+                                            todos.filter( (todo) => todo.group===group.id ).map( (todo, todoI) =>
                                                 <li
                                                     key={`todosListTodo${todoI}`}
                                                     className={`list-group-item list-group-item-action py-3 list-group-item-${variantsState[todo.status]}`}

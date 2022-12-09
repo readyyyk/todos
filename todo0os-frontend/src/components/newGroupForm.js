@@ -2,7 +2,7 @@ import React, {useRef, useState} from 'react';
 import {Form, InputGroup, Button} from 'react-bootstrap';
 import Api from '../api'
 
-const NewGroupForm = ({lastId, newGroup}) => {
+const NewGroupForm = ({newGroup, setToast}) => {
 
     const title = useRef()
 
@@ -10,9 +10,16 @@ const NewGroupForm = ({lastId, newGroup}) => {
         e.preventDefault()
 
         if(title.current.value.trim()){
-            // Api.create_group({title:newGroupTitle, color_scheme:'0'})
-            newGroup({id:lastId+1, title:title.current.value, color_scheme:5})
-            title.current.value = ''
+            Api.create_group({title: title.current.value, color_scheme: 0})
+                .then( (res)=>{
+                    res.data.then( resData => {
+                        newGroup(resData)
+                        title.current.value = ''
+                    } )
+                } )
+                .catch( (err) => {
+                    setToast({show:true, data:{color:'danger', text:'sth went wrong... <b>(during adding new group)</b>', textColor:'light'}})
+                } )
         }
     }
 

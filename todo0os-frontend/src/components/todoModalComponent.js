@@ -10,65 +10,83 @@ const EditToolsComponent = ({show, data, action, setData, setToast, updateTodo, 
         deadline_dateInput = useRef(),
         deadline_timeInput = useRef()
     useEffect( ()=>{
-        titleInput.current.value = data.title||''
-        textInput.current.value = data.text||''
-        start_dateInput.current.value = data.start_date
-        start_timeInput.current.value = data.start_time
-        deadline_dateInput.current.value = data.deadline_date
-        deadline_timeInput.current.value = data.deadline_time
+        titleInput.current.value = data.title||`${(Math.random()*36).toString(36).replace(/\./g, '')}`//''
+        textInput.current.value = data.text||`${(Math.random()*36).toString(36).replace(/\./g, '')}`//''
+        start_dateInput.current.value = data.start_date??new Date().toISOString().slice(0, -14)
+        start_timeInput.current.value = data.start_time??new Date().toISOString().slice(0, -8).slice(11, 17)
+        deadline_dateInput.current.value = data.deadline_date??new Date().toISOString().slice(0, -14)
+        deadline_timeInput.current.value = data.deadline_time??new Date().toISOString().slice(0, -8).slice(11, 17)
     }, [data] )
+
+    const escListener = (e) =>{
+        if(e.key === 'Escape'){
+            setData({show: false, data:data})
+            document.removeEventListener( 'keydown', escListener)
+        }
+    }
+    useEffect( ()=>{
+        if(show){
+            document.addEventListener( 'keydown', escListener )
+        }
+    }, [show] )
 
     const handleSubmit = (e) => {
         // Api.editTodo()
         e.preventDefault()
 
-        if(action === 'upd') {
-            updateTodo(
-                {
-                    id: data.id,
-                    groupId: data.groupId,
-                    title: titleInput.current.value,
-                    text: textInput.current.value,
-                    start_date: start_dateInput.current.value,
-                    start_time: start_timeInput.current.value,
-                    deadline_date: deadline_dateInput.current.value,
-                    deadline_time: deadline_timeInput.current.value,
-                    status: data.status
-                }
-            )
-        } else if (action === 'new'){
-            addTodo(
-                {
-                    groupId: data.groupId,
-                    title: titleInput.current.value,
-                    text: textInput.current.value,
-                    start_date: start_dateInput.current.value,
-                    start_time: start_timeInput.current.value,
-                    deadline_date: deadline_dateInput.current.value,
-                    deadline_time: deadline_timeInput.current.value,
-                    status: 'passive'
-                },
-            )
+        const newTodo = {
+            id: data.id,
+            group: data.group,
+            title: titleInput.current.value,
+            text: textInput.current.value,
+            start_date: start_dateInput.current.value,
+            start_time: start_timeInput.current.value,
+            deadline_date: deadline_dateInput.current.value,
+            deadline_time: deadline_timeInput.current.value,
+            status: data.status??'passive'
         }
-        setData({show: false, data: data})
-        setToast({show:true, data:{color:'warning', text:'edit tool is in dev', textColor:'dark'}})
+
+        if(action === 'upd') {
+            console.log(data)
+            Api.update_todo( newTodo )
+                .then( res => {
+                    updateTodo( newTodo )
+                    setData({show: false, data: data})
+                } )
+                .catch( err => {
+                    setToast({show:true, data:{color:'danger', text:'sth went wrong... (during editing item)', textColor:'light'}})
+                    throw err
+                } )
+        } else if (action === 'new'){
+            delete newTodo.id
+            console.log(newTodo)
+            Api.create_todo(newTodo)
+                .then( res=>{
+                    setToast({show:true, data:{color:'success', text:'Successfully created todo', textColor:'light'}})
+                    res.data.then( resData => {
+                        addTodo(resData)
+                        setData({show: false, data: data})
+                    } )
+
+                } )
+                .catch( err => {
+                    setToast({show:true, data:{color:'danger', text:'sth went wrong... <b>(during new todo)</b>', textColor:'light'}})
+                    throw err;
+                } )
+
+        }
     }
 
     const handleDelete = () => {
-        /*Api.delete_todo(data.id)
-            .then(res =>{
-                if(!res.error){
-                    setToast({show:true, data:{color:'success', text:'Successfully deleted', textColor:'light'}})
-                } else {
-                    setToast({show:true, data:{color:'danger', text:'sth went wrong... (during deletion item)', textColor:'light'}})
-                }
+        Api.delete_todo(data.id)
+            .then(res => {
+                deleteTodo(data.id)
+                setData({show:false, data: data})
             })
             .catch( err=>{
-                setToast({show:true, data:{color:'danger', text:'sth went wrong... (during deletion item)', textColor:'light'}})
+                setToast({show:true, data:{color:'danger', text:'sth went wrong... <b>(during deletion item)</b>>', textColor:'light'}})
                 throw err
-            } )*/
-        deleteTodo(data.id)
-        setData({show:false, data: data})
+            } )
     }
 
     const handleCancel = () => {
@@ -81,9 +99,11 @@ const EditToolsComponent = ({show, data, action, setData, setToast, updateTodo, 
                 <div className="card px-0 overflow-auto pLib-sb-Minimal mb-2"
                      style={{width: '30em', maxWidth: '90vw', maxHeight: '60vh', height: 'fit-content'}}>
                     <div className="card-header py-3 d-flex justify-content-between align-items-center">
-                        <input type="text" className="form-control mb-0" name="card-title" placeholder="Title"
+                        <input autoFocus type="text" className="form-control mb-0" name="card-title" placeholder="Title"
                                 ref={titleInput}
-                                required/>
+
+                                required
+                        />
                     </div>
                     <div className="card-body">
                         <textarea className="form-control lh-sm"
@@ -97,11 +117,15 @@ const EditToolsComponent = ({show, data, action, setData, setToast, updateTodo, 
                         <div className="row">
                             <div className="col-5">
                                 <input type="date" disabled={action === 'upd'} className="dt-input mb-2" title="Start date"
+                                       min = {new Date().toISOString().slice(0, -14)}
                                        ref={start_dateInput}
-                                       required/>
+                                       required
+                                />
                                 <input type="time" disabled={action === 'upd'} className="dt-input" title="Start time"
+                                       min={new Date().toISOString().slice(0, -8).slice(11, 17)}
                                        ref={start_timeInput}
-                                       required/>
+                                       required
+                                />
                             </div>
 
                             {/*<div class="col-2 p-0 d-flex justify-content-center align-items-center">*/}

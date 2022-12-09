@@ -1,26 +1,31 @@
 import React from 'react';
 
 import Dropdown from "react-bootstrap/Dropdown";
+import Api from "../api";
 
-const TodosElement = ({data, updateTodo, openEdit}) => {
+const TodosElement = ({data, updateTodo, openEdit, setToast}) => {
     const update = (field, newValue ) => {
-        /*Api.updateTodo(data, field, newValue)
+        const updTodo = data
+        updTodo[field] = newValue
+        return Api.update_todo(updTodo)
             .then( res => {
                 if(res.error){
                     setToast({show:true, data:{color:'danger', text:'sth went wrong... (during color updadte)', textColor:'light'}})
                     throw res.error
                 } else {
-
+                    updateTodo( updTodo )
+                    return true
                 }
             } )
             .catch( err => {
                 setToast({show:true, data:{color:'danger', text:'sth went wrong... (during color updadte)', textColor:'light'}})
                 throw err
-            } )*/
-        let tempTodoData = data
-        tempTodoData[field] = newValue
-        updateTodo(tempTodoData)
+            } )
     }
+    // let tempTodoData = data
+    //     tempTodoData[field] = newValue
+    //     updateTodo(tempTodoData)
+    // }
 
     const variantsState = {
         'passive': "secondary",

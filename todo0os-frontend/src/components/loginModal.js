@@ -5,7 +5,7 @@ import Form from "react-bootstrap/Form";
 
 import Api from '../api'
 
-const LoginModal = ({show, setShow, goReg, setToast}) => {
+const LoginModal = ({show, setShow, goReg, setToast, setLogged}) => {
 
     const usernameEl = useRef(),
         passwordEl = useRef(),
@@ -27,11 +27,13 @@ const LoginModal = ({show, setShow, goReg, setToast}) => {
             //api query
             Api.login({username: username, password: password} )
                 .then( (res)=>{
-                    if(!res.error){
-                        setShow(false)
+                    if(res.error){
                         setToast({show:true, data:{color:'danger', text:'pop up sth went wrong...', textColor:'light'}})
                     } else {
+                        setShow(false)
+                        setLogged(username)
                         setToast({show:true, data:{color:'success', text:'Successfully logged in', textColor:'light'}})
+document.location.reload()
                     }
                 } )
                 .catch( (err)=>{

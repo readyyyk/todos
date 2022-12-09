@@ -23,19 +23,19 @@ import Api from './api'
 
 function App() {
 
-    const [data, setData] = useState({userId:0, userName:'admin'} )
+    const getCookie = (name) => {
+        const match = document.cookie.replace(' ', '').split(/[,;=]/g)
+        return match[match.indexOf(name)+1]
+    }
+
+    const [logged, setLogged] = useState({userName:getCookie('username'), userWallpaper: ''} )
 
     const [groups, setGroups] = useState([
-        {
-            id: 0,
-            title: 'template title',
-            color_scheme: 4
-        },
-        {
-            id: 1,
-            title: 'template title 2',
-            color_scheme: 3
-        }
+        // {
+        //     id: 0,
+        //     title: 'template title',
+        //     color_scheme: 4
+        // }
     ])
     const updateGroup = (data) => {
         setGroups(
@@ -55,7 +55,7 @@ function App() {
         )
         setTodos(
             todos.filter( todo => {
-                return todo.groupId!==id
+                return todo.group!==id
             } )
         )
     }
@@ -64,39 +64,17 @@ function App() {
     }
 
     const [todos, setTodos] = useState([
-        {
-            id: 0,
-            groupId: 0,
-            title: 'template title',
-            text: 'lorem lorem lorem v lorem lorem lorem lorem lorem lorem lorem',
-            start_date: '2006-11-16',
-            start_time: '00:00',
-            deadline_date: '2022-11-16',
-            deadline_time: '23:59',
-            status: 'IMPORTANT'
-        },
-        {
-            id: 1,
-            groupId: 0,
-            title: '2',
-            text: '123',
-            start_date: '2506-11-16',
-            start_time: '00:00',
-            deadline_date: '2022-11-16',
-            deadline_time: '23:59',
-            status: 'IMPORTANT'
-        },
-        {
-            id: 2,
-            groupId: 1,
-            title: '2 todo title',
-            text: 'lorem ',
-            start_date: '2007-12-26',
-            start_time: '13:30',
-            deadline_date: '3022-11-16',
-            deadline_time: '13:55',
-            status: 'in progress'
-        },
+        // {
+        //     id: 0,
+        //     group: 0,
+        //     title: 'template title',
+        //     text: 'lorem lorem lorem v lorem lorem lorem lorem lorem lorem lorem',
+        //     start_date: '2006-11-16',
+        //     start_time: '00:00',
+        //     deadline_date: '2022-11-16',
+        //     deadline_time: '23:59',
+        //     status: 'IMPORTANT'
+        // }
     ])
     const updateTodo = (data) => {
         setTodos(
@@ -118,6 +96,12 @@ function App() {
                 ...data
             }
         ] )
+        console.log([...todos,
+            {
+                id: todos.at(-1).id+1,
+                ...data
+            }
+        ])
     }
 
     const [dataEditTools, setDataEditTools] = useState(
@@ -125,7 +109,7 @@ function App() {
             action:'upd',
             data: {
                 id: 0,
-                groupId: 0,
+                group: 0,
                 title: 'template todo title',
                 text: 'lorem lorem lorem v lorem lorem lorem lorem lorem lorem lorem',
                 start_date: '11-16-2006',
@@ -143,34 +127,54 @@ function App() {
 
     const [toastData, setToastData] = useState({show:false, data:{color:'success', text:'template text', textColor:'light'}})
 
-
-
-    /*useEffect(()=>{
-        if(document.cookie){
-            Api.get_data()
+    useEffect(()=>{
+        // if(document.cookie){
+            Api.get_groups()
                 .then( (res)=>{
                     if(res['error']){
                             setToastData({show:true, data:{color:'danger', text:'error fetching data', textColor:'light'}})
-                        // pop up error
                     } else {
-                        res['data']
-                            .then( (res)=>{
-                                console.log(res)
-                            } )
+                        res.data.then( (resData)=>{
+                            const localGroups = resData.values
+                            const localTodos = []
+
+                            setGroups( localGroups )
+
+                            Api.get_todos(localGroups.map(el=>el.id))
+                                .then( resTodos => {
+                                    resTodos.data.then( resTodos => {
+                                        setTodos(resTodos)
+                                    } )
+                                } )
+
+                            // Promise.all( localGroups.map( group => { return Api.get_group_todo( group.id ) } ) )
+                            //     .then( values => {
+                            //         values.forEach( groupRes => {
+                            //
+                            //             groupRes.data.then( groupResData => {
+                            //                 localTodos.push(...groupResData.todos)
+                            //                 console.log(localTodos)
+                            //             } )
+                            //         } )
+                            //         setTodos(localTodos)
+                            //     } )
+                        } )
                     }
                 } )
                 .catch( err => {
                     setToastData({show:true, data:{color:'danger', text:'error fetching data', textColor:'light'}})
                     throw err
                 } )
-        }
-    }, [])*/
-
+        // }
+    }, [logged])
 
     return (
         <>
 
-            <NewGroupForm lastId={groups.at(-1).id} newGroup={newGroup}/>
+            <NewGroupForm
+                newGroup={newGroup}
+                setToast={setToastData}
+            />
 
             <main className="container-fluid d-flex flex-wrap pt-2 px-2 px-sm-4 pb-4 justify-content-center   horizontal">
 
@@ -178,7 +182,7 @@ function App() {
                     groups.map( el =>
                         <TodosGroup
                             data={el}
-                            innerData={todos.filter(todo=>todo.groupId===el.id)}
+                            innerData={todos.filter(todo=>todo.group===el.id)}
 
                             updateGroup={updateGroup}
                             updateTodo={updateTodo}
@@ -206,18 +210,18 @@ function App() {
             <NavbarComponent
                 setShowTodosList={setShowTodosList}
                 showLoginModal={setLoginModalShow} showRegModal={setRegModalShow} showLogoutModal={setSignoutModalShow}
-                username={data.userName}
+                username={logged.userName}
             />
 
-            <LoginModal show={loginModalShow} setShow={setLoginModalShow} goReg={setRegModalShow} setToast={setToastData}/>
-            <RegModal show={regModalShow} setShow={setRegModalShow} goLogin={setLoginModalShow} setToast={setToastData}/>
+            <LoginModal show={loginModalShow} setShow={setLoginModalShow} goReg={setRegModalShow} setToast={setToastData} setLogged={setLogged} />
+            <RegModal show={regModalShow} setShow={setRegModalShow} goLogin={setLoginModalShow} setToast={setToastData} setLogged={setLogged}/>
             <SignoutModal show={signoutModalShow} setShow={setSignoutModalShow} setToast={setToastData}/>
 
             <TodosListComponent
                 show={showTodosList} setShow={setShowTodosList}
                 openEdit={setDataEditTools}
                 groups={groups} todos={todos}
-                username ={data.userName}
+                username ={logged.userName}
             />
 
             <TodosToast show={toastData.show} setShow={setToastData} data={toastData.data}/>
