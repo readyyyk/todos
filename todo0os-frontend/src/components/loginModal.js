@@ -5,13 +5,18 @@ import Form from "react-bootstrap/Form";
 
 import Api from '../api'
 
-const LoginModal = ({show, setShow, goReg, setToast, setLogged}) => {
+const LoginModal = ({show, setShow, goReg, setToast, setLoaderShow}) => {
 
     const usernameEl = useRef(),
         passwordEl = useRef(),
-        [usernameFeedback, setUsernameFeedback] = useState(''),
-        [passwordFeedback, setPasswordFeedback] = useState('')
+        [usernameFeedback, setUsernameFeedback] = useState({show: false, data: <></>}),
+        [passwordFeedback, setPasswordFeedback] = useState({show: false, data: <></>})
 
+    const close = () => {
+        setShow(false)
+        setUsernameFeedback({show: false, data: <></>})
+        setPasswordFeedback({show: false, data: <></>})
+    }
     const handleSubmit = () => {
         const username = usernameEl.current.value,
             password = passwordEl.current.value
@@ -20,24 +25,36 @@ const LoginModal = ({show, setShow, goReg, setToast, setLogged}) => {
         setPasswordFeedback('')
 
         if(!username){
-            setUsernameFeedback('Please enter username')
+            setUsernameFeedback({show: true, data: <>Please enter username</>})
         } else if(!password){
-            setPasswordFeedback('Please enter password')
+            setPasswordFeedback({show: true, data: <>Please enter password</>})
         } else {
-            //api query
             Api.login({username: username, password: password} )
                 .then( (res)=>{
                     if(res.error){
-                        setToast({show:true, data:{color:'danger', text:'pop up sth went wrong...', textColor:'light'}})
+                        res.info.text
+                            .then( resError => {
+                                resError = JSON.parse(resError)
+                                switch (resError.error){
+                                    case '0':
+                                        setUsernameFeedback({show:true, data: <> no user with username <b><i>{username}</i></b> found </>} )
+                                        break
+                                    case '1':
+                                        setPasswordFeedback({show: true, data: <> Wrong password! </>})
+                                        break
+                                    default:
+                                        setToast({show:true, data:{color:'danger', text:'Sth went wrong... (during login)', textColor:'light'}})
+                                        break
+                                }
+                            } )
                     } else {
                         setShow(false)
-                        setLogged(username)
-                        setToast({show:true, data:{color:'success', text:'Successfully logged in', textColor:'light'}})
-document.location.reload()
+                        setToast({show: true,data: {color: 'success', text: 'Successfully logged in', textColor: 'light'}})
+                        setLoaderShow(true)
                     }
                 } )
                 .catch( (err)=>{
-                    setToast({show:true, data:{color:'danger', text:'pop up sth went wrong...  (during login)', textColor:'light'}})
+                    setToast({show:true, data:{color:'danger', text:'Sth went wrong... (during login)', textColor:'light'}})
                     throw err
                 } )
         }
@@ -45,7 +62,7 @@ document.location.reload()
 
 
     return (
-        <Modal show={show} centered onHide={()=>setShow(false)}>
+        <Modal show={show} centered onHide={close}>
             <Modal.Header closeButton>
                 <Modal.Title> Login </Modal.Title>
             </Modal.Header>
@@ -53,14 +70,14 @@ document.location.reload()
                 <Form className='mb-3'>
                     <Form.Group className="mb-3" controlId="formBasicEmail">
                         <Form.Label> Username </Form.Label>
-                        <Form.Control type="text" placeholder="Username" ref={usernameEl} className={`${usernameFeedback?'is-invalid':''}`}/>
-                        <div className="invalid-feedback"> {usernameFeedback} </div>
+                        <Form.Control type="text" placeholder="Username" ref={usernameEl} className={`${usernameFeedback.show?'is-invalid':''}`}/>
+                        <div className="invalid-feedback"> {usernameFeedback.data} </div>
                     </Form.Group>
 
                     <Form.Group className="mb-3">
                         <Form.Label>Password</Form.Label>
-                        <Form.Control type="password" placeholder="Password" ref={passwordEl} className={`${passwordFeedback?'is-invalid':''}`}/>
-                        <div className="invalid-feedback"> {passwordFeedback} </div>
+                        <Form.Control type="password" placeholder="Password" ref={passwordEl} className={`${passwordFeedback.show?'is-invalid':''}`}/>
+                        <div className="invalid-feedback"> {passwordFeedback.data} </div>
                     </Form.Group>
                 </Form>
                 <div className="w-100 d-flex justify-content-between align-items-end">

@@ -10,8 +10,8 @@ const EditToolsComponent = ({show, data, action, setData, setToast, updateTodo, 
         deadline_dateInput = useRef(),
         deadline_timeInput = useRef()
     useEffect( ()=>{
-        titleInput.current.value = data.title||`${(Math.random()*36).toString(36).replace(/\./g, '')}`//''
-        textInput.current.value = data.text||`${(Math.random()*36).toString(36).replace(/\./g, '')}`//''
+        titleInput.current.value = data.title||''//`${(Math.random()*36).toString(36).replace(/\./g, '')}`
+        textInput.current.value = data.text||''//`${(Math.random()*36).toString(36).replace(/\./g, '')}`
         start_dateInput.current.value = data.start_date??new Date().toISOString().slice(0, -14)
         start_timeInput.current.value = data.start_time??new Date().toISOString().slice(0, -8).slice(11, 17)
         deadline_dateInput.current.value = data.deadline_date??new Date().toISOString().slice(0, -14)
@@ -31,7 +31,6 @@ const EditToolsComponent = ({show, data, action, setData, setToast, updateTodo, 
     }, [show] )
 
     const handleSubmit = (e) => {
-        // Api.editTodo()
         e.preventDefault()
 
         const newTodo = {
@@ -46,10 +45,19 @@ const EditToolsComponent = ({show, data, action, setData, setToast, updateTodo, 
             status: data.status??'passive'
         }
 
+        if(newTodo.start_date > newTodo.deadline_date){
+            setToast({show:true, data:{color:'danger', text:'you are already not in time (( ', textColor:'light'}})
+            return
+        }
+        if(newTodo.start_date === newTodo.deadline_date && newTodo.start_time >= newTodo.deadline_time){
+            setToast({show:true, data:{color:'danger', text:'interesting time of deadlines', textColor:'light'}})
+            return
+        }
+
         if(action === 'upd') {
-            console.log(data)
             Api.update_todo( newTodo )
                 .then( res => {
+                    setToast({show:true, data:{color:'success', text:'Successfully edited todo', textColor:'light'}})
                     updateTodo( newTodo )
                     setData({show: false, data: data})
                 } )
@@ -59,7 +67,6 @@ const EditToolsComponent = ({show, data, action, setData, setToast, updateTodo, 
                 } )
         } else if (action === 'new'){
             delete newTodo.id
-            console.log(newTodo)
             Api.create_todo(newTodo)
                 .then( res=>{
                     setToast({show:true, data:{color:'success', text:'Successfully created todo', textColor:'light'}})

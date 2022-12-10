@@ -5,7 +5,7 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
-const RegModal = ({show, setShow, goLogin, setToast, setLogged}) => {
+const RegModal = ({show, setShow, goLogin, setToast, setLoaderShow}) => {
 
     const usernameEl = useRef(),
         password1El = useRef(),
@@ -38,18 +38,26 @@ const RegModal = ({show, setShow, goLogin, setToast, setLogged}) => {
             Api.registration({username: username, password: p1})
             .then( (res)=>{
                 if(res.error){
-                    setToast({show:true, data:{color:'danger', text:'sth went wrong... ', textColor:'light'}})
-                    throw res.error
+                    res.info.text
+                        .then( (resError)=> {
+                            resError = JSON.parse(resError)
+                            switch (resError.error) {
+                                case '0':
+                                    setUsernameFeedback('user with this username already exists')
+                                    break
+                                default:
+                                    setToast({ show: true, data: { color: 'danger', text: 'Sth went wrong... (during registration)', textColor: 'light'}})
+                                    break
+                            }
+                        })
                 } else {
-                    // console.log(`registered successfully u:${username} p:${p1}`)
-                    setLogged(username)
+                    setLoaderShow(true)
                     setToast({show:true, data:{color:'success', text:'Successfully registered', textColor:'light'}})
                     setShow(false)
-document.location.reload()
                 }
             })
             .catch( (err)=>{
-                setToast({show:true, data:{color:'danger', text:'sth went wrong... <b>(during registration)</b>', textColor:'light'}})
+                setToast({show:true, data:{color:'danger', text:'sth went wrong... (during registration)', textColor:'light'}})
                 throw err
             } )
         }

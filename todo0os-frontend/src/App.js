@@ -19,24 +19,25 @@ import SignoutModal from "./components/signoutModal";
 
 import TodosToast from "./components/todosToast";
 
+import { JellyTriangle } from '@uiball/loaders'
+
 import Api from './api'
 
 function App() {
 
     const getCookie = (name) => {
-        const match = document.cookie.replace(' ', '').split(/[,;=]/g)
-        return match[match.indexOf(name)+1]
+        const matches = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"))
+        return matches ? decodeURIComponent(matches[1]) : undefined;
     }
 
-    const [logged, setLogged] = useState({userName:getCookie('username'), userWallpaper: ''} )
+    const [logged, setLogged] = useState({userName:getCookie('username'), userWallpaper: '', userColor: '#0D6EFD'} )
+    const [loaderShow, setLoaderShow] = useState( true )
 
-    const [groups, setGroups] = useState([
-        // {
-        //     id: 0,
-        //     title: 'template title',
-        //     color_scheme: 4
-        // }
-    ])
+    useEffect( ()=>{
+        setLogged({userName: getCookie('username'), userWallpaper: '', userColor: '#0D6EFD'})
+    }, [document.cookie] )
+
+    const [groups, setGroups] = useState([])
     const updateGroup = (data) => {
         setGroups(
             groups.map( group => {
@@ -63,19 +64,7 @@ function App() {
         setGroups( [...groups, data] )
     }
 
-    const [todos, setTodos] = useState([
-        // {
-        //     id: 0,
-        //     group: 0,
-        //     title: 'template title',
-        //     text: 'lorem lorem lorem v lorem lorem lorem lorem lorem lorem lorem',
-        //     start_date: '2006-11-16',
-        //     start_time: '00:00',
-        //     deadline_date: '2022-11-16',
-        //     deadline_time: '23:59',
-        //     status: 'IMPORTANT'
-        // }
-    ])
+    const [todos, setTodos] = useState([])
     const updateTodo = (data) => {
         setTodos(
             todos.map( todo => {
@@ -90,18 +79,7 @@ function App() {
         setTodos( todos.filter( (el)=> el.id!==id ) )
     }
     const addTodo = (data) => {
-        setTodos( [...todos,
-            {
-                id: todos.at(-1).id+1,
-                ...data
-            }
-        ] )
-        console.log([...todos,
-            {
-                id: todos.at(-1).id+1,
-                ...data
-            }
-        ])
+        setTodos( [...todos, data] )
     }
 
     const [dataEditTools, setDataEditTools] = useState(
@@ -110,13 +88,13 @@ function App() {
             data: {
                 id: 0,
                 group: 0,
-                title: 'template todo title',
-                text: 'lorem lorem lorem v lorem lorem lorem lorem lorem lorem lorem',
-                start_date: '11-16-2006',
-                start_time: '00:00',
-                deadline_date: '11-16-2022',
-                deadline_time: '23:59',
-                status: 'IMPORTANT'
+                title: '',
+                text: '',
+                start_date: '',
+                start_time: '',
+                deadline_date: '',
+                deadline_time: '',
+                status: ''
             }
         } )
     const [showTodosList, setShowTodosList] = useState(false)
@@ -128,36 +106,27 @@ function App() {
     const [toastData, setToastData] = useState({show:false, data:{color:'success', text:'template text', textColor:'light'}})
 
     useEffect(()=>{
-        // if(document.cookie){
+        if(getCookie('Authorization')){
             Api.get_groups()
                 .then( (res)=>{
                     if(res['error']){
                             setToastData({show:true, data:{color:'danger', text:'error fetching data', textColor:'light'}})
                     } else {
                         res.data.then( (resData)=>{
+                            setLoaderShow(false)
+
                             const localGroups = resData.values
-                            const localTodos = []
 
                             setGroups( localGroups )
 
-                            Api.get_todos(localGroups.map(el=>el.id))
-                                .then( resTodos => {
-                                    resTodos.data.then( resTodos => {
-                                        setTodos(resTodos)
-                                    } )
-                                } )
-
-                            // Promise.all( localGroups.map( group => { return Api.get_group_todo( group.id ) } ) )
-                            //     .then( values => {
-                            //         values.forEach( groupRes => {
-                            //
-                            //             groupRes.data.then( groupResData => {
-                            //                 localTodos.push(...groupResData.todos)
-                            //                 console.log(localTodos)
-                            //             } )
-                            //         } )
-                            //         setTodos(localTodos)
-                            //     } )
+                            if(localGroups.length) {
+                                Api.get_todos(localGroups.map(el => el.id))
+                                    .then(resTodos => {
+                                        resTodos.data.then(resTodos => {
+                                            setTodos(resTodos)
+                                        })
+                                    })
+                            }
                         } )
                     }
                 } )
@@ -165,64 +134,105 @@ function App() {
                     setToastData({show:true, data:{color:'danger', text:'error fetching data', textColor:'light'}})
                     throw err
                 } )
-        // }
+        } else {
+            setLoaderShow(false)
+            setGroups([])
+            setTodos([])
+            setRegModalShow(true)
+        }
     }, [logged])
 
     return (
         <>
-
-            <NewGroupForm
-                newGroup={newGroup}
-                setToast={setToastData}
-            />
-
-            <main className="container-fluid d-flex flex-wrap pt-2 px-2 px-sm-4 pb-4 justify-content-center   horizontal">
-
-                {
-                    groups.map( el =>
-                        <TodosGroup
-                            data={el}
-                            innerData={todos.filter(todo=>todo.group===el.id)}
-
-                            updateGroup={updateGroup}
-                            updateTodo={updateTodo}
-
-                            deleteGroup={deleteGroup}
-
-                            setToast={setToastData}
-
-                            openEdit={setDataEditTools}
-                            key={`group-${el.id}`}
+            {
+                loaderShow
+                ?
+                    <div
+                        style={{
+                            width: '100%',
+                            minHeight: '50vh',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'end'
+                        }}
+                    >
+                        <JellyTriangle
+                            size={60}
+                            speed={0.85}
+                            color={logged.userColor}
                         />
-                    )
-                }
+                    </div>
 
-                <TodoModalComponent
-                    show={dataEditTools.show}
-                    action={dataEditTools.action}
-                    data={dataEditTools.data} setData={setDataEditTools}
-                    setToast={setToastData}
-                    deleteTodo={deleteTodo} updateTodo={updateTodo} addTodo={addTodo}
-                />
+                :
 
-            </main>
+                    <>
 
+                        {
+                            logged.userName
+                            ?
+                                <NewGroupForm
+                                    newGroup={newGroup}
+                                    setToast={setToastData}
+                                />
+                            :
+                                <></>
+                        }
+
+                        <main
+                            className="container-fluid d-flex flex-wrap pt-2 px-2 px-sm-4 pb-4 justify-content-center   horizontal">
+
+                            {
+                                groups.map(el =>
+                                    <TodosGroup
+                                        data={el}
+                                        innerData={todos.filter(todo => todo.group === el.id)}
+
+                                        updateGroup={updateGroup}
+                                        updateTodo={updateTodo}
+
+                                        deleteGroup={deleteGroup}
+
+                                        setToast={setToastData}
+
+                                        openEdit={setDataEditTools}
+                                        key={`group-${el.id}`}
+                                    />
+                                )
+                            }
+
+                            <TodoModalComponent
+                                show={dataEditTools.show}
+                                action={dataEditTools.action}
+                                data={dataEditTools.data} setData={setDataEditTools}
+                                setToast={setToastData}
+                                deleteTodo={deleteTodo} updateTodo={updateTodo} addTodo={addTodo}
+                            />
+
+                        </main>
+
+                        <TodosListComponent
+                            show={showTodosList} setShow={setShowTodosList}
+                            openEdit={setDataEditTools}
+                            groups={groups} todos={todos}
+                            username={logged.userName}
+                        />
+                    </>
+            }
             <NavbarComponent
                 setShowTodosList={setShowTodosList}
-                showLoginModal={setLoginModalShow} showRegModal={setRegModalShow} showLogoutModal={setSignoutModalShow}
+                showLoginModal={setLoginModalShow} showRegModal={setRegModalShow}
+                showLogoutModal={setSignoutModalShow}
                 username={logged.userName}
+                bg={logged.userColor}
             />
 
-            <LoginModal show={loginModalShow} setShow={setLoginModalShow} goReg={setRegModalShow} setToast={setToastData} setLogged={setLogged} />
-            <RegModal show={regModalShow} setShow={setRegModalShow} goLogin={setLoginModalShow} setToast={setToastData} setLogged={setLogged}/>
+
+            <LoginModal show={loginModalShow} setShow={setLoginModalShow} goReg={setRegModalShow}
+                        setToast={setToastData} setLoaderShow={setLoaderShow}/>
+            <RegModal show={regModalShow} setShow={setRegModalShow} goLogin={setLoginModalShow}
+                      setToast={setToastData} setLoaderShow={setLoaderShow}/>
             <SignoutModal show={signoutModalShow} setShow={setSignoutModalShow} setToast={setToastData}/>
 
-            <TodosListComponent
-                show={showTodosList} setShow={setShowTodosList}
-                openEdit={setDataEditTools}
-                groups={groups} todos={todos}
-                username ={logged.userName}
-            />
 
             <TodosToast show={toastData.show} setShow={setToastData} data={toastData.data}/>
         </>

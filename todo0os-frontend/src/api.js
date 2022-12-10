@@ -1,10 +1,15 @@
 
 const link = 'localhost'
 const port = 8000
+const maxAgeCookie = 864e3 // 10 days
 
 const getCookie = (name) => {
-    const match = document.cookie.replace(' ', '').split(/[,;=]/g)
-    return match[match.indexOf(name)+1]
+    const matches = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"))
+    return matches ? decodeURIComponent(matches[1]) : undefined;
+}
+
+const setCookie = (name, value) => {
+    document.cookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)}; max-age=${maxAgeCookie}; SameSite=Lax`
 }
 
 class Api {
@@ -14,10 +19,7 @@ class Api {
     }
 
     get token() {
-        // const auth = document.cookie
-        //     .split(';')[0]
-        //     .split('Authorization=')[1]
-        // console.log(getCookie('Authorization'))
+        // console.log(getCookie('username'))
         return getCookie('Authorization')?.split(',')[0]
     }
 
@@ -71,8 +73,8 @@ class Api {
             if(!response['error']){
                 response.data.then(data => {
                     let access_token = data['access_token']
-                    document.cookie = `Authorization=${access_token}, username=${username}`
-                    // console.log(access_token)
+                    setCookie('Authorization', `${access_token}`)
+                    setCookie('username', username)
                 })    
             }
             return response;
@@ -89,11 +91,16 @@ class Api {
             if(!response['error']){
                 response.data.then((json) => {
                     let access_token = json['access_token']
-                    document.cookie = `Authorization=${access_token}, username=${username}`
+                    setCookie('Authorization', `${access_token}`)
+                    setCookie('username', username)
                 })
             }
             return response;
         })
+    }
+    logout(){
+        setCookie('Authorization', '')
+        setCookie('username', '')
     }
 
 
@@ -157,12 +164,6 @@ class Api {
         return this.do_request(
             this.make_request_object({body : arguments[0], method:'POST'}),
             this.api_url+'/api/update_group'
-        )
-    }
-    get_group_todo(group_id){
-        return this.do_request(
-            this.make_request_object({body: {}, method: 'GET'}),
-            this.api_url + `/api/get_group_todo/${group_id}`
         )
     }
 }

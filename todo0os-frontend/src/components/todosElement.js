@@ -22,10 +22,6 @@ const TodosElement = ({data, updateTodo, openEdit, setToast}) => {
                 throw err
             } )
     }
-    // let tempTodoData = data
-    //     tempTodoData[field] = newValue
-    //     updateTodo(tempTodoData)
-    // }
 
     const variantsState = {
         'passive': "secondary",

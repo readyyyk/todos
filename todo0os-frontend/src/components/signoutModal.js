@@ -3,10 +3,12 @@ import React from 'react'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 
+import Api from '../api'
+
 const SignoutModal = ({show, setShow, setToast}) => {
 
     const handleSubmit = () => {
-        document.cookie = ''
+        Api.logout()
         setToast({show:true, data:{color:'success', text:'Successfully signed out', textColor:'light'}})
         setShow(false)
     }

@@ -1,6 +1,3 @@
-.hover-text-primary{
-    transition: all .3s ease;
-}
 .hover-text-primary:hover{
     color: #0D6EFD;
     fill: #0D6EFD;
@@ -10,9 +7,17 @@
     cursor: pointer;
 }
 
+nav .dropdown-item{
+    transition: all .3s ease;
+}
 nav .dropdown-item:hover{
     background: inherit;
 }
+
+nav .dropdown-item.disabled svg{
+    fill: #b0b8bf;
+}
+
 nav .dropdown-menu.show{
     bottom: 35% !important;
     display: flex;
