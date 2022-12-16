@@ -89,7 +89,7 @@ const LoginModal = ({show, setShow, goReg, setToast, setLoaderShow}) => {
                             Close
                         </Button>
                     </div>
-                    <span className='text-secondary'> Already have an account? <a href='#' onClick={()=>{setShow(false); goReg(true)}}> Sign up </a> </span>
+                    <span className='text-secondary'> Already have an account? <a href='#' onClick={()=>{goReg(true); close();}}> Sign up </a> </span>
                 </div>
             </Modal.Body>
         </Modal>

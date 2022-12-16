@@ -118,6 +118,7 @@ const EditToolsComponent = ({show, data, action, setData, setToast, updateTodo, 
                                   style={{letterSpacing: '.5px', maxHeight: '33vh', minHeight: '20vh'}} minLength = "1"
                                   maxLength="10000"
                                   ref={textInput}
+                                  spellCheck='false'
                                   required/>
                     </div>
                     <div className="card-footer fs-6 lh-1 text-secondary">

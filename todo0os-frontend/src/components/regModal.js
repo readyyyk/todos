@@ -61,7 +61,13 @@ const RegModal = ({show, setShow, goLogin, setToast, setLoaderShow}) => {
                 throw err
             } )
         }
+    }
 
+    const close = () => {
+        setUsernameFeedback('')
+        setPassword1Feedback('')
+        setPassword2Feedback('')
+        setShow(false)
     }
 
     return (
@@ -98,7 +104,7 @@ const RegModal = ({show, setShow, goLogin, setToast, setLoaderShow}) => {
                             Cancel
                         </Button>
                     </div>
-                    <span className='text-secondary'> Already have an account? <a href='#' onClick={()=>{setShow(false); goLogin(true)}}> Sign in </a> </span>
+                    <span className='text-secondary'> Already have an account? <a href='#' onClick={()=>{goLogin(true); close();}}> Sign in </a> </span>
                 </div>
             </Modal.Body>
         </Modal>

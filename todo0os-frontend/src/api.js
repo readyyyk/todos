@@ -1,4 +1,3 @@
-
 const link = 'localhost'
 const port = 8000
 const maxAgeCookie = 864e3 // 10 days
